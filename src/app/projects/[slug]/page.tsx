@@ -1,6 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
-import { projects, getProjectBySlug } from "@/data/projects";
+import { projects, getProjectBySlug, isBrandingProject } from "@/data/projects";
+import BrandingCasePage from "@/components/branding/BrandingCasePage";
 
 export function generateStaticParams() {
   return projects.map((project) => ({ slug: project.slug }));
@@ -15,17 +15,14 @@ export default async function ProjectPage({
   const project = getProjectBySlug(slug);
   if (!project) return <div>Project not found</div>;
 
+  if (isBrandingProject(project)) {
+    return <BrandingCasePage project={project} />;
+  }
+
   return (
     <main className="px-6 py-24 md:px-16 lg:px-48">
-      <Link
-        href="/"
-        className="inline-block text-sm font-mono uppercase tracking-widest text-muted transition-colors hover:text-foreground"
-      >
-        &larr; Back
-      </Link>
-
-      <div className="mt-16 grid grid-cols-1 gap-16 md:grid-cols-2 md:items-start">
-        <div>
+      <div className="grid grid-cols-1 gap-16 md:grid-cols-2 md:items-stretch">
+        <div className="flex flex-col justify-center">
           <p className="text-sm font-mono uppercase tracking-widest text-muted">
             {project.category}
           </p>
@@ -37,14 +34,16 @@ export default async function ProjectPage({
           </p>
         </div>
 
-        <div>
-          <Image
-            src={project.image}
-            alt={project.title}
-            width={1200}
-            height={800}
-            className="w-full h-auto rounded-lg"
-          />
+        <div className="flex w-full items-stretch">
+          <div className="relative my-auto aspect-[17/10] w-full overflow-hidden rounded-lg border border-border bg-surface md:aspect-auto md:h-full">
+            <Image
+              src={project.image}
+              alt={project.title}
+              fill
+              sizes="(max-width:768px) 100vw, 560px"
+              className="object-cover"
+            />
+          </div>
         </div>
       </div>
     </main>

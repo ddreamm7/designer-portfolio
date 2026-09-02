@@ -1,12 +1,26 @@
+import Image from "next/image";
 import FadeInView from "@/components/FadeInView";
-import LogoCarousel from "@/components/LogoCarousel";
+import HeroActions from "@/components/HeroActions";
+import LogoGrid from "@/components/LogoGrid";
 import ProjectGrid from "@/components/ProjectGrid";
 import { getLogos } from "@/data/logotypes";
 import { getProjectsBySection } from "@/data/projects";
 
+
 const SOCIAL_LINKS = [
-  { name: "Instagram", href: "https://instagram.com" },
-  { name: "LinkedIn", href: "https://linkedin.com" },
+  { name: "Instagram", href: "https://www.instagram.com/dayanap.designer" },
+  { name: "Facebook", href: "https://www.facebook.com/dayanapgdesigner" },
+  { name: "Behance", href: "https://behance.net/dayanadesigner4" },
+] as const;
+
+const SOFTWARES = [
+  { label: "Photoshop", abbr: "Ps" },
+  { label: "Illustrator", abbr: "Ai" },
+  { label: "InDesign", abbr: "Id" },
+  { label: "Premiere Pro", abbr: "Pr" },
+  { label: "After Effects", abbr: "Ae" },
+  { label: "Lightroom", abbr: "Lr" },
+  { label: "CapCut", abbr: "Cc" },
 ] as const;
 
 function SectionHeader({
@@ -51,21 +65,42 @@ export default function HomePage() {
   return (
     <main>
       {/* 00 HERO */}
-      <section id="hero" className="flex min-h-screen items-center px-6 md:px-16 lg:px-48">
-        <FadeInView>
+      <section
+        id="hero"
+        className="relative grid min-h-dvh grid-cols-1 content-center gap-10 overflow-hidden px-6 py-24 md:grid-cols-2 md:gap-0 md:px-16 md:py-10 lg:px-48"
+      >
+        <FadeInView className="flex items-center">
           <div>
-            <p className="mb-4 text-sm font-mono uppercase tracking-widest text-muted">
-              Diseñadora Gráfica y Editora de Contenido
-            </p>
-            <h1 className="text-6xl font-bold leading-none tracking-tighter md:text-8xl lg:text-9xl">
-              Portfolio
+            <span className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-[11px] tracking-widest text-muted">
+              <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
+              Perú
+            </span>
+            <h1 className="mt-4 text-6xl font-bold leading-none tracking-tighter md:text-7xl lg:text-8xl">
+              Dayana
               <br />
-              Creativo
+              Pumajulca
             </h1>
-            <p className="mt-8 max-w-md text-lg text-muted">
-                Una colección curada de trabajos de branding, redes sociales, diseño
-              impreso y audiovisual.
+            <p className="mt-6 max-w-md text-lg leading-relaxed text-muted">
+              Branding, redes sociales, diseño gráfico y audiovisual.
             </p>
+            <HeroActions />
+          </div>
+        </FadeInView>
+        <FadeInView className="flex items-center justify-center md:items-stretch">
+          <div className="relative flex w-full items-center justify-center overflow-hidden rounded-[40px] py-4 md:h-full md:rounded-[48px] md:py-0">
+            <div
+              aria-hidden
+              className="absolute inset-0 -z-10 rounded-[40px] bg-accent/5 blur-3xl md:rounded-[48px]"
+            />
+            <Image
+              src="/assets/home/hero_logo.png"
+              alt="Hero logo"
+              width={2250}
+              height={1500}
+              className="h-auto w-full max-w-130 overflow-hidden rounded-[40px] object-contain md:h-full md:max-h-dvh md:w-full md:max-w-none md:rounded-[48px] md:object-contain"
+              priority
+              sizes="(max-width: 768px) 90vw, 50vw"
+            />
           </div>
         </FadeInView>
       </section>
@@ -76,30 +111,33 @@ export default function HomePage() {
           <div className="grid grid-cols-1 gap-16 md:grid-cols-12">
             <div className="md:col-span-4">
               <span className="text-sm font-mono font-medium text-muted">01</span>
-              <p className="mb-3 mt-1 text-sm font-mono uppercase tracking-widest text-muted">
-                Sobre Mí
-              </p>
-              <h2 className="text-3xl font-bold leading-tight tracking-tight md:text-4xl">
-                Diseñadora y<br />Creadora de Contenido
+              <h2 className="mt-1 text-4xl font-bold uppercase tracking-tight md:text-5xl">
+                Diseñadora
+                <br />
+                Gráfica y Audiovisual
               </h2>
             </div>
             <div className="md:col-span-7 md:col-start-6">
               <p className="text-lg leading-relaxed text-muted">
-                Con formación en diseño gráfico y edición de contenidos, creo
-                identidades visuales que comunican con claridad y propósito.
-                Cada proyecto es una oportunidad para destilar ideas complejas en
-                un diseño limpio y memorable.
+                Hola soy Dayana y soy Diseñadora Gráfica con experiencia en agencias y proyectos digitales. Responsable, organizada y comprometida con la calidad del trabajo.
               </p>
               <p className="mt-6 text-lg leading-relaxed text-muted">
-                Me especializo en branding, diseño editorial, estrategia de redes
-                sociales y producción audiovisual, siempre guiada por un
-                compromiso con el trabajo intencional y cuidado al detalle.
+                Enfocada en diseño para redes sociales, branding y edición de contenido audiovisual. Actualmente, me encuentro en constante crecimiento profesional, con el objetivo de seguir ampliando mis conocimientos.
               </p>
-              <div className="mt-10 flex flex-wrap gap-x-10 gap-y-4 text-sm uppercase tracking-widest text-muted">
-                <span>Branding</span>
-                <span>Editorial</span>
-                <span>Redes Sociales</span>
-                <span>Audiovisual</span>
+
+              <div className="mt-10 border-t border-border pt-6">
+                <p className="mb-3 text-xs font-mono uppercase tracking-widest text-subtle">
+                  Softwares
+                </p>
+                <ul className="flex flex-wrap gap-x-5 gap-y-1.5">
+                  {SOFTWARES.map((sw) => (
+                    <li key={sw.label} className="text-sm tracking-wide text-muted">
+                      <span className="font-mono text-xs text-subtle">{sw.abbr}</span>
+                      <span className="mx-1.5 text-border">·</span>
+                      {sw.label}
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
           </div>
@@ -112,36 +150,30 @@ export default function HomePage() {
         <ProjectSection section="branding" startBlock={0} />
       </section>
 
-      {/* 03 SOCIAL MEDIA */}
-      <section id="social-media" className="px-6 py-16 md:py-24 md:px-16 lg:px-48">
-        <SectionHeader number="03" title="Redes Sociales" />
-        <ProjectSection section="social-media" startBlock={1} />
-      </section>
-
-      {/* 04 FLYERS */}
+      {/* 03 FLYERS */}
       <section id="flyers" className="px-6 py-16 md:py-24 md:px-16 lg:px-48">
-        <SectionHeader number="04" title="Flyers" />
-        <ProjectSection section="flyers" startBlock={2} />
+        <SectionHeader number="03" title="Flyers" />
+        <ProjectSection section="flyers" startBlock={1} />
       </section>
 
-      {/* 05 LOGOFOLIO */}
+      {/* 04 LOGOS */}
       <section id="logofolio" className="px-6 py-16 md:py-24 md:px-16 lg:px-48">
-        <SectionHeader number="05" title="Logofolio" />
-        <LogoCarousel logos={getLogos()} />
+        <SectionHeader number="04" title="Logos" />
+        <LogoGrid logos={getLogos()} />
       </section>
 
-      {/* 06 AUDIOVISUAL */}
+      {/* 05 AUDIOVISUAL */}
       <section id="audiovisual" className="px-6 py-16 md:py-24 md:px-16 lg:px-48">
-        <SectionHeader number="06" title="Audiovisual" />
+        <SectionHeader number="05" title="Audiovisual" />
         <ProjectSection section="audiovisual" variant="video" />
       </section>
 
-      {/* 07 CONTACT */}
+      {/* 06 CONTACT */}
       <footer id="contact" className="px-6 py-16 md:py-24 md:px-16 lg:px-48">
         <FadeInView>
           <div className="grid grid-cols-1 gap-16 md:grid-cols-12">
             <div className="md:col-span-5">
-              <span className="text-sm font-mono font-medium text-muted">07</span>
+              <span className="text-sm font-mono font-medium text-muted">06</span>
               <h2 className="mt-1 text-4xl font-bold uppercase tracking-tight md:text-5xl">
                 Contacto
               </h2>
@@ -149,12 +181,20 @@ export default function HomePage() {
                 Disponible para proyectos freelance, dirección creativa y
                 colaboraciones. Creemos algo extraordinario juntos.
               </p>
-              <a
-                href="mailto:hello@designer.com"
-                className="mt-6 inline-block text-lg font-medium text-muted transition-colors hover:text-foreground"
-              >
-                hello@designer.com
-              </a>
+              <div className="mt-8 flex flex-col gap-3">
+                <a
+                  href="tel:+51964322491"
+                  className="inline-flex items-center gap-2 text-sm tracking-wide text-muted transition-colors hover:text-foreground"
+                >
+                  <span className="text-subtle">T</span> +51 964 322 491
+                </a>
+                <a
+                  href="mailto:dayanap.designer@gmail.com"
+                  className="inline-flex items-center gap-2 text-sm tracking-wide text-muted transition-colors hover:text-foreground"
+                >
+                  <span className="text-subtle">@</span> dayanap.designer@gmail.com
+                </a>
+              </div>
             </div>
             <div className="md:col-span-5 md:col-start-8 md:flex md:flex-col md:justify-end">
               <p className="mb-4 text-sm font-mono uppercase tracking-widest text-muted">

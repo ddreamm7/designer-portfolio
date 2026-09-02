@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import SmoothScrollProvider from "@/components/SmoothScrollProvider";
-import PageTransition from "@/components/PageTransition";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -17,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Portfolio — Diseñadora Gráfica y Editora de Contenido",
+  title: "Portfolio — Diseñadora Gráfica y Audiovisual",
   description:
       "Un portfolio minimalista que muestra trabajos de branding, redes sociales, flyers y audiovisual.",
 };
@@ -32,7 +31,7 @@ export default function RootLayout({
       <body className="font-sans antialiased">
         <SmoothScrollProvider>
           <Header />
-          <PageTransition>{children}</PageTransition>
+          {children}
           <Footer />
         </SmoothScrollProvider>
       </body>

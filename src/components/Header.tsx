@@ -1,16 +1,18 @@
 "use client";
 
+import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { useLenis } from "@/components/SmoothScrollProvider";
+
 
 const NAV_ITEMS = [
   { id: "hero", label: "Inicio" },
   { id: "about", label: "Sobre Mí" },
   { id: "branding", label: "Branding" },
-  { id: "social-media", label: "Redes Sociales" },
   { id: "flyers", label: "Flyers" },
-  { id: "logofolio", label: "Logofolio" },
+  { id: "logofolio", label: "Logos" },
   { id: "audiovisual", label: "Audiovisual" },
   { id: "contact", label: "Contacto" },
 ];
@@ -29,7 +31,12 @@ export default function Header() {
 
   useEffect(() => {
     if (menuOpen) lenisStop();
-    else lenisStart();
+    else {
+      lenisStart();
+      setVisible(true);
+      lastScrollYRef.current = window.scrollY;
+      tickingRef.current = false;
+    }
   }, [menuOpen, lenisStop, lenisStart]);
 
   useEffect(() => () => lenisStart(), [lenisStart]);
@@ -50,12 +57,14 @@ export default function Header() {
 
   useEffect(() => {
     if (!isHome) return;
+    if (menuOpen) return;
 
     const sections = NAV_ITEMS.map((item) =>
       document.getElementById(item.id),
     ).filter(Boolean) as HTMLElement[];
 
     const handleScroll = () => {
+      if (menuOpen) return;
       const currentScrollY = window.scrollY;
       const scrollDiff = currentScrollY - lastScrollYRef.current;
       const goingDown = scrollDiff > 0;
@@ -98,7 +107,7 @@ export default function Header() {
       window.removeEventListener("scroll", handleScroll);
       off?.();
     };
-  }, [isHome, lenis]);
+  }, [isHome, lenis, menuOpen]);
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     if (!isHome) return;
@@ -112,16 +121,41 @@ export default function Header() {
 
   const toggleMenu = () => {
     if (!isHome) return;
-    setMenuOpen((prev) => !prev);
+    setMenuOpen((prev) => {
+      const next = !prev;
+      if (!next) {
+        setVisible(true);
+        lastScrollYRef.current = window.scrollY;
+        tickingRef.current = false;
+      }
+      return next;
+    });
   };
 
   if (!isHome) {
     return (
       <header
         data-lenis-prevent
-        className="fixed top-0 right-0 left-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-md pointer-events-none"
+        className="fixed top-0 right-0 left-0 z-40 border-b border-border/60 bg-background/90 backdrop-blur-md"
       >
-        <div className="px-6 py-6 md:px-16 lg:px-48" aria-hidden />
+        <div className="flex items-center justify-between px-6 py-4 md:px-16 lg:px-48">
+          <a href="/" aria-label="Ir al inicio">
+            <Image
+              src="/assets/home/logo_white.png"
+              alt="Logo"
+              width={1186}
+              height={1002}
+              className="h-10 w-auto object-contain md:h-11"
+              priority
+            />
+          </a>
+          <Link
+            href="/"
+            className="text-sm font-mono uppercase tracking-widest text-muted transition-colors hover:text-foreground"
+          >
+            &larr; Volver
+          </Link>
+        </div>
       </header>
     );
   }
@@ -130,32 +164,58 @@ export default function Header() {
     <>
       <header
         data-lenis-prevent
-        className={`fixed top-0 right-0 left-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-md transition-transform duration-500 ease-out ${
+        className={`animate-header-in fixed top-0 right-0 left-0 z-40 border-b border-border/60 bg-background/90 backdrop-blur-md transition-transform duration-500 ease-out ${
           visible ? "translate-y-0 pointer-events-auto" : "-translate-y-full pointer-events-none"
         }`}
       >
         {/* Desktop nav */}
-        <nav className="hidden lg:flex items-center justify-center gap-6 px-6 py-6 md:px-16 lg:px-48">
-          {NAV_ITEMS.map(({ id, label }) => (
-            <a
-              key={id}
-              href={`#${id}`}
-              onClick={(e) => handleClick(e, id)}
-              className={`group relative whitespace-nowrap text-xs tracking-widest transition-all duration-300 ${
-                activeSection === id
-                  ? " text-foreground"
-                  : "font-medium text-muted hover:text-foreground"
-              }`}
-            >
-              {label}
-              <span className="absolute -bottom-1 left-1/2 h-px w-0 bg-foreground transition-all duration-300 -translate-x-1/2 group-hover:w-full" />
-            </a>
-          ))}
+        <nav className="hidden lg:flex items-center justify-between px-6 py-4 md:px-16 lg:px-48">
+          <a
+            href="#hero"
+            onClick={(e) => handleClick(e, "hero")}
+            aria-label="Ir al inicio"
+            className="shrink-0"
+          >
+            <Image
+              src="/assets/home/logo_white.png"
+              alt="Logo"
+              width={1186}
+              height={1002}
+              className="h-10 w-auto object-contain md:h-11"
+              priority
+            />
+          </a>
+          <div className="flex items-center gap-6">
+            {NAV_ITEMS.map(({ id, label }) => (
+              <a
+                key={id}
+                href={`#${id}`}
+                onClick={(e) => handleClick(e, id)}
+                className={`group relative whitespace-nowrap text-xs tracking-widest transition-all duration-300 ${
+                  activeSection === id
+                    ? " text-foreground"
+                    : "font-medium text-muted hover:text-foreground"
+                }`}
+              >
+                {label}
+                <span className="absolute -bottom-1 left-1/2 h-px w-0 bg-foreground transition-all duration-300 -translate-x-1/2 group-hover:w-full" />
+              </a>
+            ))}
+          </div>
         </nav>
 
         {/* Mobile header bar */}
-        <div className="lg:hidden flex items-center justify-between px-6 md:px-16 py-6">
-          <span className="text-xs uppercase tracking-widest text-muted">Portfolio</span>
+        <div className="lg:hidden flex items-center justify-between px-6 py-4 md:px-16">
+          <a href="#hero" onClick={(e) => handleClick(e, "hero")} aria-label="Ir al inicio">
+            <Image
+              src="/assets/home/logo_white.png"
+              alt="Logo"
+              width={1186}
+              height={1002}
+              className="h-8 w-auto object-contain"
+              priority
+            />
+          </a>
           <button
             onClick={toggleMenu}
             aria-label={menuOpen ? "Cerrar navegación" : "Abrir navegación"}
@@ -164,7 +224,7 @@ export default function Header() {
           >
             <span
               className={`block h-px w-6 bg-foreground transition-all duration-300 ${
-                menuOpen ? "rotate-45 translate-y-[7px]" : ""
+                menuOpen ? "rotate-45 translate-y-1.75" : ""
               }`}
             />
             <span
@@ -174,7 +234,7 @@ export default function Header() {
             />
             <span
               className={`block h-px w-6 bg-foreground transition-all duration-300 ${
-                menuOpen ? "-rotate-45 -translate-y-[7px]" : ""
+                menuOpen ? "-rotate-45 -translate-y-1.75" : ""
               }`}
             />
           </button>
@@ -183,10 +243,10 @@ export default function Header() {
 
       <div
         data-lenis-prevent
-        className={`fixed inset-x-0 bottom-0 z-30 bg-background/95 backdrop-blur-md transition-opacity duration-300 ${
+        className={`fixed inset-x-0 bottom-0 z-30 bg-background/90 backdrop-blur-md transition-opacity duration-300 ${
           menuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
-        style={{ top: "72px" }}
+        style={{ top: "64px" }}
       >
         <nav className="flex flex-col items-center gap-8 pt-12 pb-24 min-h-full justify-center">
           {NAV_ITEMS.map(({ id, label }, i) => (
