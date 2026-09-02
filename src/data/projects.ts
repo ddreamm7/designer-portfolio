@@ -52,7 +52,7 @@ export const projects: Project[] = [
     subtitle: "Sérum de pestañas",
     palette: ["#7c8ca5", "#c5eafb", "#ffffff"],
     year: "2024",
-    description: "Diseño de contenido visual para MD Lash Factor Perú.\nPosts, Banners, Reels y Carruseles diseñados para maximizar la interacción.",
+    description: "Diseño y desarrollo de contenido visual para redes sociales, incluyendo posts, banners, reels y carruseles, orientados a fortalecer la identidad de marca, potenciar la comunicación visual y generar mayor interacción con la audiencia.",
     gallery: [
       { src: "/assets/brandings/md/banners/banner_1.png", alt: "MD — Banner 1", kind: "banner", aspect: "wide" },
       { src: "/assets/brandings/md/banners/banner_2.png", alt: "MD — Banner 2", kind: "banner", aspect: "wide" },
