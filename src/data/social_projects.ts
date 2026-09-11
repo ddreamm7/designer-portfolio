@@ -1,11 +1,17 @@
-export type SocialAssetKind = "banner" | "post" | "flyer" | "reel" | "logo";
+export type SocialAssetKind =
+  | "banner"
+  | "post"
+  | "flyer"
+  | "reel"
+  | "logo"
+  | "mockup";
 
 export interface SocialAsset {
   src: string;
   alt: string;
   kind: SocialAssetKind;
   caption?: string;
-  aspect?: "square" | "portrait" | "landscape" | "wide" | "9/16";
+  aspect?: "square" | "16/9" | "9/16";
   poster?: string;
   videoSrc?: string;
 }
@@ -23,23 +29,18 @@ export interface SocialProject {
   gallery: SocialAsset[];
 }
 
-export function isSocialProject(
-  project: SocialProject | { section: string },
-): project is SocialProject {
-  return project.section === "social" && "gallery" in project;
-}
-
 // --- Generador de galerías (escalable) ---
-// Cambiar de formato en el futuro = editar solo estas dos constantes.
+// Cambiar de formato en el futuro = editar las constantes de abajo.
 const IMG_EXT = ".webp";
 const VIDEO_EXT = ".webm";
 
 const KIND_ASPECT: Record<SocialAssetKind, NonNullable<SocialAsset["aspect"]>> = {
-  banner: "wide",
+  banner: "16/9",
   post: "square",
   reel: "9/16",
   logo: "square",
-  flyer: "portrait",
+  flyer: "9/16",
+  mockup: "16/9",
 };
 
 const KIND_LABEL: Record<SocialAssetKind, string> = {
@@ -48,10 +49,18 @@ const KIND_LABEL: Record<SocialAssetKind, string> = {
   reel: "Reel",
   logo: "Logo",
   flyer: "Flyer",
+  mockup: "Mockup",
 };
 
-// Orden editorial: banners → posts → reels → logos → flyers
-const KIND_ORDER: SocialAssetKind[] = ["banner", "post", "reel", "logo", "flyer"];
+// Orden editorial: banners → mockups → posts → reels → logos → flyers
+const KIND_ORDER: SocialAssetKind[] = [
+  "banner",
+  "mockup",
+  "post",
+  "reel",
+  "logo",
+  "flyer",
+];
 
 export interface SocialGallerySpec {
   /** Carpeta base del caso, ej. "/assets/social/md" */
@@ -60,6 +69,7 @@ export interface SocialGallerySpec {
   label: string;
   banners?: number;
   posts?: number;
+  mockups?: number;
   reels?: number;
   logos?: number;
   flyers?: number;
@@ -69,6 +79,7 @@ export function buildSocialGallery(spec: SocialGallerySpec): SocialAsset[] {
   const counts: Record<SocialAssetKind, number> = {
     banner: spec.banners ?? 0,
     post: spec.posts ?? 0,
+    mockup: spec.mockups ?? 0,
     reel: spec.reels ?? 0,
     logo: spec.logos ?? 0,
     flyer: spec.flyers ?? 0,
@@ -117,6 +128,24 @@ export const socialProjects: SocialProject[] = [
       banners: 3,
       posts: 8,
       reels: 4,
+    }),
+  },
+  {
+    slug: "dermanet",
+    title: "DERMANET",
+    year: "2024",
+    section: "social",
+    cover: "/assets/social/dermanet/dermanet.webp",
+    thumbnail: "/assets/social/dermanet/dermanet.webp",
+    subtitle: "Productos Dermatológicos",
+    palette: ["#7c8ca5", "#c5eafb", "#ffffff"],
+    description: "Diseño y creación de contenido visual para redes sociales, desarrollando posts, banners y reels alineados con la identidad de marca. El proyecto busca fortalecer su presencia digital mediante una comunicación visual clara, atractiva y consistente.",
+    gallery: buildSocialGallery({
+      base: "/assets/social/dermanet",
+      label: "Dermanet",
+      banners: 3,
+      mockups: 2,
+      posts: 8,
     }),
   },
 ];

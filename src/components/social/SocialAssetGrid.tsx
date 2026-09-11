@@ -7,14 +7,12 @@ function assetAspectClass(asset: SocialAsset) {
   switch (asset.aspect) {
     case "square":
       return "aspect-square";
-    case "portrait":
-      return "aspect-[3/4]";
-    case "wide":
-      return asset.kind === "banner" ? "aspect-[3/1]" : "aspect-[16/9]";
     case "9/16":
       return "aspect-[9/16]";
+    case "16/9":
+      return "aspect-[16/9]";
     default:
-      return asset.kind === "logo" ? "aspect-square" : asset.kind === "banner" ? "aspect-[3/1]" : "aspect-[4/3]";
+      return asset.kind === "logo" ? "aspect-square" : "aspect-[16/9]";
   }
 }
 

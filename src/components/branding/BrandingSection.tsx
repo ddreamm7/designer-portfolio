@@ -18,6 +18,7 @@ const FILTERS: { id: BrandingFilter; label: string }[] = [
   { id: "banner", label: "Banners" },
   { id: "flyer", label: "Flyers" },
   { id: "post", label: "Posts" },
+  { id: "mockup", label: "Mockups" },
   { id: "logotipos", label: "Logotipos" },
 ];
 

@@ -10,6 +10,7 @@ const KIND_LABELS: Record<string, string> = {
   flyer: "Flyers",
   logo: "Logos",
   reel: "Reels",
+  mockup: "Mockups",
 };
 
 function groupByKind(gallery: SocialProject["gallery"]) {
@@ -18,8 +19,8 @@ function groupByKind(gallery: SocialProject["gallery"]) {
     if (!groups.has(asset.kind)) groups.set(asset.kind, []);
     groups.get(asset.kind)!.push(asset);
   }
-  // Orden editorial: banners → posts → reels (flyer/logo si aparecen)
-  const order = ["banner", "post", "reel", "logo", "flyer"];
+  // Orden editorial: banners → mockups → posts → reels (flyer/logo si aparecen)
+  const order = ["banner", "mockup", "post", "reel", "logo", "flyer"];
   return [...groups.entries()].sort(
     (a, b) => order.indexOf(a[0]) - order.indexOf(b[0])
   );

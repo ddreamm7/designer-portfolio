@@ -42,18 +42,8 @@ function SectionHeader({
   );
 }
 
-function ProjectSection({
-  variant = "default",
-}: {
-  variant?: "default" | "video";
-}) {
-  return (
-    <ProjectGrid
-      projects={audiovisualProjects}
-      startBlock={0}
-      variant={variant}
-    />
-  );
+function ProjectSection() {
+  return <ProjectGrid projects={audiovisualProjects} />;
 }
 
 export default function HomePage() {
@@ -148,7 +138,7 @@ export default function HomePage() {
       {/* 04 AUDIOVISUAL */}
       <section id="audiovisual" className="px-6 py-16 md:py-24 md:px-16 lg:px-48">
         <SectionHeader number="04" title="Audiovisual" />
-        <ProjectSection variant="video" />
+        <ProjectSection />
       </section>
 
       {/* 05 CONTACT */}

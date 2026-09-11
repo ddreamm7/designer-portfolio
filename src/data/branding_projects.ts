@@ -1,4 +1,4 @@
-export type BrandingPieceKind = "banner" | "flyer" | "post";
+export type BrandingPieceKind = "banner" | "flyer" | "post" | "mockup";
 
 export interface BrandingPiece {
   slug: string;
@@ -129,8 +129,4 @@ export const brandingPieces: BrandingPiece[] = [
 
 export function getBrandingPieceBySlug(slug: string): BrandingPiece | undefined {
   return brandingPieces.find((p) => p.slug === slug);
-}
-
-export function getPiecesByKind(kind: BrandingPieceKind): BrandingPiece[] {
-  return brandingPieces.filter((p) => p.kind === kind);
 }

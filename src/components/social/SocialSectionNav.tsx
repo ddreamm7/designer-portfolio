@@ -8,6 +8,7 @@ const LABELS: Record<string, string> = {
   flyer: "Flyers",
   logo: "Logos",
   reel: "Reels",
+  mockup: "Mockups",
 };
 
 export default function SocialSectionNav({ kinds }: { kinds: string[] }) {
