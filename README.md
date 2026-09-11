@@ -110,7 +110,7 @@ Edit [`src/data/mock-projects.ts`](src/data/mock-projects.ts) to add, remove, or
 
 ### Logos
 
-Edit [`src/data/mock-logos.ts`](src/data/mock-logos.ts) to replace logo entries. Place logo SVGs or images in `public/images/logos/`.
+Edit [`src/data/mock-logos.ts`](src/data/mock-logos.ts) to replace logo entries. Place logo SVGs or images in `public/assets/logos`.
 
 ### Content & copy
 

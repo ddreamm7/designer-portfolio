@@ -27,7 +27,7 @@ Portfolio content lives in `src/data/` — agents edit data, not JSX, to change 
 
 - `mock-projects.ts` — the `Project` array (shape in `projects.ts`). Each item has `slug`, `title`, `category`, `section`, `thumbnail`, `image`, `description`. Sections: `branding`, `social-media`, `flyers`, `audiovisual`.
 - `mock-logos.ts` / `logotypes.ts` — logo carousel entries.
-- Image assets go under `public/images/projects/` and `public/images/logos/`, referenced as `/images/projects/<file>` etc.
+- Image assets go under `public/images/projects/` and `public/assets/logos`, referenced as `/images/projects/<file>` etc.
 
 When adding a project, add its image file to `public/` **and** the entry to `mock-projects.ts`, otherwise the build will not pick it up.
 

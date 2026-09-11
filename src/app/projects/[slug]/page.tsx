@@ -1,9 +1,21 @@
 import Image from "next/image";
-import { projects, getProjectBySlug, isBrandingProject } from "@/data/projects";
-import BrandingCasePage from "@/components/branding/BrandingCasePage";
+import { socialProjects, getSocialBySlug } from "@/data/social_projects";
+import {
+  brandingPieces,
+  getBrandingPieceBySlug,
+} from "@/data/branding_projects";
+import {
+  audiovisualProjects,
+  getAudiovisualBySlug,
+} from "@/data/audiovisual_projects";
+import SocialCasePage from "@/components/social/SocialCasePage";
 
 export function generateStaticParams() {
-  return projects.map((project) => ({ slug: project.slug }));
+  return [...socialProjects, ...brandingPieces, ...audiovisualProjects].map(
+    (project) => ({
+      slug: project.slug,
+    }),
+  );
 }
 
 export default async function ProjectPage({
@@ -12,20 +24,19 @@ export default async function ProjectPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const project = getProjectBySlug(slug);
-  if (!project) return <div>Project not found</div>;
-
-  if (isBrandingProject(project)) {
-    return <BrandingCasePage project={project} />;
+  const social = getSocialBySlug(slug);
+  if (social) {
+    return <SocialCasePage project={social} />;
   }
+
+  const project =
+    getBrandingPieceBySlug(slug) ?? getAudiovisualBySlug(slug);
+  if (!project) return <div>Project not found</div>;
 
   return (
     <main className="px-6 py-24 md:px-16 lg:px-48">
       <div className="grid grid-cols-1 gap-16 md:grid-cols-2 md:items-stretch">
         <div className="flex flex-col justify-center">
-          <p className="text-sm font-mono uppercase tracking-widest text-muted">
-            {project.category}
-          </p>
           <h1 className="mt-2 text-5xl font-bold tracking-tight md:text-7xl">
             {project.title}
           </h1>

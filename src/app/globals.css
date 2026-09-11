@@ -1,22 +1,67 @@
 @import "tailwindcss";
 @import "lenis/dist/lenis.css";
 
-@theme inline {
+@custom-variant light (&:where(.light, .light *));
+
+@theme {
   --color-background: #050505;
   --color-surface: #0f0f0f;
   --color-foreground: #fafafa;
   --color-muted: #a3a3a3;
   --color-subtle: #525252;
   --color-border: #1d1d1d;
-  --color-accent: #cba6f7;
+  --color-accent: #ffffff;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --grid-template-columns-20: repeat(20, minmax(0, 1fr));
 }
 
+.light {
+  --color-background: #fafafa;
+  --color-surface: #ffffff;
+  --color-foreground: #09090b;
+  --color-muted: #52525b;
+  --color-subtle: #a1a1aa;
+  --color-border: #e4e4e7;
+  --color-accent: #000000;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+.light {
+  color-scheme: light;
+}
+
 ::selection {
-  background-color: var(--color-accent);
-  color: #ffffff;
+  background-color: #ffffff;
+  color: #050505;
+}
+
+.light ::selection {
+  background-color: #000000;
+  color: #fafafa;
+}
+
+/* Transición de 1s al alternar tema (clase temporal desde ThemeProvider) */
+html.theme-anim *,
+html.theme-anim *::before,
+html.theme-anim *::after {
+  transition:
+    background-color 0.5s ease,
+    color 0.5s ease,
+    border-color 0.5s ease,
+    fill 0.5s ease,
+    stroke 0.5s ease !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.theme-anim *,
+  html.theme-anim *::before,
+  html.theme-anim *::after {
+    transition: none !important;
+  }
 }
 
 body {

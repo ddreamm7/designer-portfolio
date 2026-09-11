@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
-import SmoothScrollProvider from "@/components/SmoothScrollProvider";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import SmoothScrollProvider from "@/components/layout/SmoothScrollProvider";
+import ThemeProvider from "@/components/layout/ThemeProvider";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 
 const geistSans = Geist({
   subsets: ["latin"],
@@ -28,13 +29,26 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html
+      lang="es"
+      suppressHydrationWarning
+      className={`${geistSans.variable} ${geistMono.variable}`}
+    >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var s=localStorage.getItem('dp-theme');if(s==='light'||(!s&&window.matchMedia('(prefers-color-scheme: light)').matches)){document.documentElement.classList.add('light')}}catch(e){}})();`,
+          }}
+        />
+      </head>
       <body className="font-sans antialiased">
-        <SmoothScrollProvider>
-          <Header />
-          {children}
-          <Footer />
-        </SmoothScrollProvider>
+        <ThemeProvider>
+          <SmoothScrollProvider>
+            <Header />
+            {children}
+            <Footer />
+          </SmoothScrollProvider>
+        </ThemeProvider>
         <Analytics />
       </body>
     </html>

@@ -1,10 +1,10 @@
 import Image from "next/image";
-import FadeInView from "@/components/FadeInView";
-import HeroActions from "@/components/HeroActions";
-import LogoGrid from "@/components/LogoGrid";
-import ProjectGrid from "@/components/ProjectGrid";
-import { getLogos } from "@/data/logotypes";
-import { getProjectsBySection } from "@/data/projects";
+import FadeInView from "@/components/shared/FadeInView";
+import HeroActions from "@/components/shared/HeroActions";
+import ProjectGrid from "@/components/gallery/ProjectGrid";
+import SocialSection from "@/components/social/SocialSection";
+import BrandingSection from "@/components/branding/BrandingSection";
+import { audiovisualProjects } from "@/data/audiovisual_projects";
 
 
 const SOCIAL_LINKS = [
@@ -43,19 +43,14 @@ function SectionHeader({
 }
 
 function ProjectSection({
-  section,
-  startBlock = 0,
   variant = "default",
 }: {
-  section: string;
-  startBlock?: number;
   variant?: "default" | "video";
 }) {
-  const items = getProjectsBySection(section);
   return (
     <ProjectGrid
-      projects={items}
-      startBlock={startBlock}
+      projects={audiovisualProjects}
+      startBlock={0}
       variant={variant}
     />
   );
@@ -88,12 +83,8 @@ export default function HomePage() {
         </FadeInView>
         <FadeInView className="flex items-center justify-center md:items-stretch">
           <div className="relative flex w-full items-center justify-center overflow-hidden rounded-[40px] py-4 md:h-full md:rounded-[48px] md:py-0">
-            <div
-              aria-hidden
-              className="absolute inset-0 -z-10 rounded-[40px] bg-accent/5 blur-3xl md:rounded-[48px]"
-            />
             <Image
-              src="/assets/home/hero_logo.png"
+              src="/assets/home/hero_logo.webp"
               alt="Hero logo"
               width={2250}
               height={1500}
@@ -144,36 +135,28 @@ export default function HomePage() {
         </FadeInView>
       </section>
 
-      {/* 02 BRANDING */}
+      {/* 02 REDES SOCIALES */}
+      <section id="redes-sociales" className="px-6 py-16 md:py-24 md:px-16 lg:px-48">
+        <SocialSection />
+      </section>
+
+      {/* 03 BRANDING */}
       <section id="branding" className="px-6 py-16 md:py-24 md:px-16 lg:px-48">
-        <SectionHeader number="02" title="Branding" />
-        <ProjectSection section="branding" startBlock={0} />
+        <BrandingSection />
       </section>
 
-      {/* 03 FLYERS */}
-      <section id="flyers" className="px-6 py-16 md:py-24 md:px-16 lg:px-48">
-        <SectionHeader number="03" title="Flyers" />
-        <ProjectSection section="flyers" startBlock={1} />
-      </section>
-
-      {/* 04 LOGOS */}
-      <section id="logofolio" className="px-6 py-16 md:py-24 md:px-16 lg:px-48">
-        <SectionHeader number="04" title="Logos" />
-        <LogoGrid logos={getLogos()} />
-      </section>
-
-      {/* 05 AUDIOVISUAL */}
+      {/* 04 AUDIOVISUAL */}
       <section id="audiovisual" className="px-6 py-16 md:py-24 md:px-16 lg:px-48">
-        <SectionHeader number="05" title="Audiovisual" />
-        <ProjectSection section="audiovisual" variant="video" />
+        <SectionHeader number="04" title="Audiovisual" />
+        <ProjectSection variant="video" />
       </section>
 
-      {/* 06 CONTACT */}
+      {/* 05 CONTACT */}
       <footer id="contact" className="px-6 py-16 md:py-24 md:px-16 lg:px-48">
         <FadeInView>
           <div className="grid grid-cols-1 gap-16 md:grid-cols-12">
             <div className="md:col-span-5">
-              <span className="text-sm font-mono font-medium text-muted">06</span>
+              <span className="text-sm font-mono font-medium text-muted">05</span>
               <h2 className="mt-1 text-4xl font-bold uppercase tracking-tight md:text-5xl">
                 Contacto
               </h2>
