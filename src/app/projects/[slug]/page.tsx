@@ -1,14 +1,12 @@
-import Image from "next/image";
 import { socialProjects, getSocialBySlug } from "@/data/social_projects";
-import {
-  brandingPieces,
-  getBrandingPieceBySlug,
-} from "@/data/branding_projects";
+import { brandingPieces, getBrandingPieceBySlug } from "@/data/branding_projects";
 import {
   audiovisualProjects,
   getAudiovisualBySlug,
 } from "@/data/audiovisual_projects";
 import SocialCasePage from "@/components/social/SocialCasePage";
+import BrandingCasePage from "@/components/branding/BrandingCasePage";
+import ZoomableImage from "@/components/shared/ZoomableImage";
 
 export function generateStaticParams() {
   return [...socialProjects, ...brandingPieces, ...audiovisualProjects].map(
@@ -29,8 +27,12 @@ export default async function ProjectPage({
     return <SocialCasePage project={social} />;
   }
 
-  const project =
-    getBrandingPieceBySlug(slug) ?? getAudiovisualBySlug(slug);
+  const branding = getBrandingPieceBySlug(slug);
+  if (branding) {
+    return <BrandingCasePage project={branding} />;
+  }
+
+  const project = getAudiovisualBySlug(slug);
   if (!project) return <div>Project not found</div>;
 
   return (
@@ -47,10 +49,9 @@ export default async function ProjectPage({
 
         <div className="flex w-full items-stretch">
           <div className="relative my-auto aspect-[17/10] w-full overflow-hidden rounded-lg border border-border bg-surface md:aspect-auto md:h-full">
-            <Image
+            <ZoomableImage
               src={project.image}
               alt={project.title}
-              fill
               sizes="(max-width:768px) 100vw, 560px"
               className="object-cover"
             />

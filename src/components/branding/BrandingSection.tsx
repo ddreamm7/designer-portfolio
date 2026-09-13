@@ -7,6 +7,7 @@ import ProjectCard from "@/components/gallery/ProjectCard";
 import LogoGrid from "@/components/gallery/LogoGrid";
 import {
   brandingPieces,
+  BRANDING_KIND_LABELS,
   type BrandingPieceKind,
 } from "@/data/branding_projects";
 import { getLogos } from "@/data/logos_projects";
@@ -33,6 +34,7 @@ function PiecesGrid({ visibleCount }: { visibleCount: number }) {
             slug={piece.slug}
             title={piece.title}
             year={piece.year}
+            eyebrow={BRANDING_KIND_LABELS[piece.kind]}
             thumbnail={piece.thumbnail}
             variant="large"
           />
@@ -52,6 +54,7 @@ function KindGrid({ kind }: { kind: BrandingPieceKind }) {
             slug={piece.slug}
             title={piece.title}
             year={piece.year}
+            eyebrow={BRANDING_KIND_LABELS[piece.kind]}
             thumbnail={piece.thumbnail}
             variant="large"
           />
@@ -74,7 +77,7 @@ export default function BrandingSection() {
   return (
     <div>
       <FadeInView>
-        <div className="mb-12 flex items-center justify-between gap-4">
+        <div className="mb-12 flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between md:gap-4">
           <div className="flex items-baseline gap-4">
             <span className="text-sm font-mono font-medium text-muted">03</span>
             <h2 className="text-4xl font-bold uppercase tracking-tight md:text-5xl">
@@ -84,18 +87,18 @@ export default function BrandingSection() {
           <div
             role="tablist"
             aria-label="Filtrar piezas de branding"
-            className="flex items-center gap-4 md:gap-5"
+            className="-mx-6 flex w-[calc(100%+3rem)] items-center gap-4 overflow-x-auto px-6 pb-1 scrollbar-none [mask-image:linear-gradient(to_right,transparent_0,transparent_12px,black_36px,black_calc(100%-36px),transparent_calc(100%-12px),transparent_100%)] md:mx-0 md:w-auto md:gap-5 md:px-0 md:[mask-image:none]"
           >
             {FILTERS.map(({ id, label }, index) => (
               <Fragment key={id}>
                 {index > 0 && (
-                  <span aria-hidden className="h-4 w-px bg-border" />
+                  <span aria-hidden className="h-4 w-px shrink-0 bg-border" />
                 )}
                 <button
                   role="tab"
                   aria-selected={filter === id}
                   onClick={() => handleFilterChange(id)}
-                  className={`text-xs uppercase tracking-widest transition-colors duration-300 ${
+                  className={`shrink-0 whitespace-nowrap text-xs uppercase tracking-widest transition-colors duration-300 ${
                     filter === id
                       ? "text-foreground"
                       : "cursor-pointer text-subtle hover:text-foreground"

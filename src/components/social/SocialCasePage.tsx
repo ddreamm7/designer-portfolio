@@ -1,6 +1,6 @@
-import Image from "next/image";
 import type { SocialProject } from "@/data/social_projects";
 import FadeInView from "@/components/shared/FadeInView";
+import ZoomableImage from "@/components/shared/ZoomableImage";
 import SocialAssetGrid from "./SocialAssetGrid";
 import SocialSectionNav from "./SocialSectionNav";
 
@@ -32,19 +32,24 @@ export default function SocialCasePage({ project }: { project: SocialProject }) 
 
   return (
     <main className="px-6 py-24 md:px-16 lg:px-48">
-      {/* Hero social */}
-      <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:items-stretch">
-        <FadeInView className="flex">
-          <div className="flex w-full flex-col justify-center">
-            <h1 className="mt-2 text-4xl font-bold tracking-tight md:text-6xl">
-              {project.title}
-            </h1>
-            {project.subtitle && (
-              <p className="mt-2 text-lg font-medium tracking-wide text-muted">
-                {project.subtitle}
-              </p>
-            )}
-            <p className="mt-6 whitespace-pre-line text-lg leading-relaxed text-muted">
+      {/* Hero social — editorial: titular a ancho completo */}
+      <FadeInView>
+        <div className="max-w-5xl">
+          <h1 className="text-4xl font-bold tracking-tight text-balance md:text-6xl">
+            {project.title}
+          </h1>
+          {project.subtitle && (
+            <p className="mt-3 text-lg font-medium tracking-wide text-muted">
+              {project.subtitle}
+            </p>
+          )}
+        </div>
+      </FadeInView>
+
+      <div className="mt-10 grid grid-cols-1 gap-10 md:grid-cols-2 md:items-stretch">
+        <FadeInView delay={0.05} className="flex min-w-0">
+          <div className="flex w-full min-w-0 flex-col justify-center">
+            <p className="whitespace-pre-line text-lg leading-relaxed text-muted">
               {project.description}
             </p>
 
@@ -70,13 +75,12 @@ export default function SocialCasePage({ project }: { project: SocialProject }) 
           </div>
         </FadeInView>
 
-        <FadeInView delay={0.1} className="flex">
-          <div className="flex w-full items-stretch">
+        <FadeInView delay={0.1} className="flex min-w-0">
+          <div className="flex w-full min-w-0 items-stretch">
             <div className="relative my-auto aspect-[17/10] w-full max-h-full overflow-hidden rounded-lg border border-border bg-surface md:aspect-auto md:h-full md:max-h-none">
-              <Image
+              <ZoomableImage
                 src={project.cover}
                 alt={project.title}
-                fill
                 sizes="(max-width:768px) 100vw, 560px"
                 className="object-cover"
                 priority

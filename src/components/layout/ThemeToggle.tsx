@@ -2,9 +2,17 @@
 
 import { useTheme } from "./ThemeProvider";
 
-export default function ThemeToggle() {
+type ThemeToggleProps = {
+  size?: "sm" | "md";
+  className?: string;
+};
+
+const ICON_SIZES = { sm: 20, md: 24 } as const;
+
+export default function ThemeToggle({ size = "md", className = "" }: ThemeToggleProps) {
   const { theme, toggle } = useTheme();
   const isLight = theme === "light";
+  const iconSize = ICON_SIZES[size];
 
   return (
     <button
@@ -13,16 +21,16 @@ export default function ThemeToggle() {
       aria-pressed={isLight}
       aria-label={isLight ? "Cambiar a tema oscuro" : "Cambiar a tema claro"}
       title={isLight ? "Tema oscuro" : "Tema claro"}
-      className="cursor-pointer text-muted transition-colors duration-300 hover:text-foreground"
+      className={`inline-flex shrink-0 cursor-pointer items-center justify-center p-2 text-muted transition-colors duration-300 hover:text-foreground ${className}`}
     >
       {isLight ? (
         <svg
-          width="24"
-          height="24"
+          width={iconSize}
+          height={iconSize}
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          strokeWidth="2"
+          strokeWidth="1.5"
           strokeLinecap="round"
           strokeLinejoin="round"
           aria-hidden
@@ -31,12 +39,12 @@ export default function ThemeToggle() {
         </svg>
       ) : (
         <svg
-          width="24"
-          height="24"
+          width={iconSize}
+          height={iconSize}
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          strokeWidth="2"
+          strokeWidth="1.5"
           strokeLinecap="round"
           strokeLinejoin="round"
           aria-hidden
