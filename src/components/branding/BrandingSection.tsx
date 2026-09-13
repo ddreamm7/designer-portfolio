@@ -27,9 +27,13 @@ const PIECES_PAGE_SIZE = 4;
 
 function PiecesGrid({ visibleCount }: { visibleCount: number }) {
   return (
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
+    <div className="columns-1 md:columns-2 gap-6 md:gap-8 [column-fill:_balance]">
       {brandingPieces.slice(0, visibleCount).map((piece, i) => (
-        <FadeInView key={piece.slug} delay={i * 0.05} className="h-full">
+        <FadeInView
+          key={piece.slug}
+          delay={i * 0.035}
+          className="mb-6 md:mb-8 break-inside-avoid"
+        >
           <ProjectCard
             slug={piece.slug}
             title={piece.title}
@@ -37,6 +41,7 @@ function PiecesGrid({ visibleCount }: { visibleCount: number }) {
             eyebrow={BRANDING_KIND_LABELS[piece.kind]}
             thumbnail={piece.thumbnail}
             variant="large"
+            masonry
           />
         </FadeInView>
       ))}
@@ -47,9 +52,13 @@ function PiecesGrid({ visibleCount }: { visibleCount: number }) {
 function KindGrid({ kind }: { kind: BrandingPieceKind }) {
   const pieces = brandingPieces.filter((p) => p.kind === kind);
   return (
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8">
+    <div className="columns-1 md:columns-2 gap-6 md:gap-8 [column-fill:_balance]">
       {pieces.map((piece, i) => (
-        <FadeInView key={piece.slug} delay={i * 0.05} className="h-full">
+        <FadeInView
+          key={piece.slug}
+          delay={i * 0.035}
+          className="mb-6 md:mb-8 break-inside-avoid"
+        >
           <ProjectCard
             slug={piece.slug}
             title={piece.title}
@@ -57,6 +66,7 @@ function KindGrid({ kind }: { kind: BrandingPieceKind }) {
             eyebrow={BRANDING_KIND_LABELS[piece.kind]}
             thumbnail={piece.thumbnail}
             variant="large"
+            masonry
           />
         </FadeInView>
       ))}

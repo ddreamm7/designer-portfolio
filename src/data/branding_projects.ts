@@ -12,6 +12,9 @@ export interface BrandingAsset {
   alt: string;
   kind: BrandingPieceKind;
   aspect?: "square" | "16/9" | "32/9" | "9/16";
+  /** Dimensiones intrínsecas para masonry (evita CLS y permite ratio natural) */
+  width?: number;
+  height?: number;
 }
 
 export interface BrandingPiece {

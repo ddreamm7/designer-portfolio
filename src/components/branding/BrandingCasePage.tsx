@@ -47,7 +47,7 @@ export default function BrandingCasePage({ project }: { project: BrandingPiece }
           </div>
         </FadeInView>
 
-        <FadeInView delay={0.1} className="flex min-w-0">
+        <FadeInView delay={0.1} className="flex min-w-0 hidden">
           <div className="flex w-full min-w-0 items-stretch">
             <div className="relative my-auto aspect-[17/10] w-full max-h-full overflow-hidden rounded-lg border border-border bg-surface md:aspect-auto md:h-full md:max-h-none">
               <ZoomableImage
