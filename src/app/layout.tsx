@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
@@ -21,6 +21,25 @@ export const metadata: Metadata = {
   title: "Portfolio — Diseñadora Gráfica y Audiovisual",
   description:
       "Un portfolio minimalista que muestra trabajos de branding, redes sociales, flyers y audiovisual.",
+  icons: {
+    icon: [
+      {
+        url: "/assets/home/favicon-black.ico",
+        media: "(prefers-color-scheme: light)",
+      },
+      {
+        url: "/assets/home/favicon-white.ico",
+        media: "(prefers-color-scheme: dark)",
+      },
+    ],
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fafafa" },
+    { media: "(prefers-color-scheme: dark)", color: "#050505" },
+  ],
 };
 
 export default function RootLayout({

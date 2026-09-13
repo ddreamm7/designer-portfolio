@@ -7,7 +7,8 @@ import Image from "next/image";
 interface ProjectCardProps {
   slug: string;
   title: string;
-  year: string;
+  year?: string;
+  eyebrow?: string;
   thumbnail: string;
   variant?: "default" | "large";
 }
@@ -16,6 +17,7 @@ function ProjectCard({
   slug,
   title,
   year,
+  eyebrow,
   thumbnail,
   variant = "default",
 }: ProjectCardProps) {
@@ -45,7 +47,7 @@ function ProjectCard({
         </div>
         <div className="mt-4">
           <p className="text-xs uppercase tracking-widest text-muted">
-            {year}
+            {eyebrow ?? year}
           </p>
           <h3 className="mt-1 text-lg font-semibold">{title}</h3>
         </div>

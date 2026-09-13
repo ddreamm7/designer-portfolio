@@ -1,6 +1,10 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
 import type { SocialAsset } from "@/data/social_projects";
 import FadeInView from "@/components/shared/FadeInView";
+import ImageModal from "@/components/shared/ImageModal";
 import SocialReelCard from "./SocialReelCard";
 
 function assetAspectClass(asset: SocialAsset) {
@@ -11,12 +15,22 @@ function assetAspectClass(asset: SocialAsset) {
       return "aspect-[9/16]";
     case "16/9":
       return "aspect-[16/9]";
+    case "32/9":
+      return "aspect-[32/9]";
     default:
       return asset.kind === "logo" ? "aspect-square" : "aspect-[16/9]";
   }
 }
 
-function AssetCard({ asset, index }: { asset: SocialAsset; index: number }) {
+function AssetCard({
+  asset,
+  index,
+  onOpen,
+}: {
+  asset: SocialAsset;
+  index: number;
+  onOpen: (asset: SocialAsset) => void;
+}) {
   if (asset.kind === "reel") {
     return (
       <FadeInView delay={index * 0.04}>
@@ -35,7 +49,12 @@ function AssetCard({ asset, index }: { asset: SocialAsset; index: number }) {
 
   return (
     <FadeInView delay={index * 0.04}>
-      <div className="group overflow-hidden rounded-lg border border-border bg-surface">
+      <button
+        type="button"
+        onClick={() => onOpen(asset)}
+        aria-label={`Ver imagen ampliada: ${asset.alt}`}
+        className="group block w-full cursor-zoom-in overflow-hidden rounded-lg border border-border bg-surface text-left"
+      >
         <div className={`relative overflow-hidden bg-surface ${assetAspectClass(asset)} ${isLogo ? "p-6" : ""}`}>
           <Image
             src={asset.src}
@@ -53,12 +72,22 @@ function AssetCard({ asset, index }: { asset: SocialAsset; index: number }) {
         {(asset.caption && isLogo) && (
           <p className="px-3 py-2 text-xs tracking-wide text-muted">{asset.caption}</p>
         )}
-      </div>
+      </button>
     </FadeInView>
   );
 }
 
 export default function SocialAssetGrid({ assets }: { assets: SocialAsset[] }) {
+  const [selected, setSelected] = useState<SocialAsset | null>(null);
+
+  const modal = selected && (
+    <ImageModal
+      src={selected.src}
+      alt={selected.alt}
+      onClose={() => setSelected(null)}
+    />
+  );
+
   if (assets.length === 0) return null;
 
   const first = assets[0];
@@ -69,7 +98,12 @@ export default function SocialAssetGrid({ assets }: { assets: SocialAsset[] }) {
     return (
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
         {assets.map((a, i) => (
-          <AssetCard key={`${a.src}-${i}`} asset={a} index={i} />
+          <AssetCard
+            key={`${a.src}-${i}`}
+            asset={a}
+            index={i}
+            onOpen={setSelected}
+          />
         ))}
       </div>
     );
@@ -77,30 +111,54 @@ export default function SocialAssetGrid({ assets }: { assets: SocialAsset[] }) {
 
   if (isLogos) {
     return (
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-        {assets.map((a, i) => (
-          <AssetCard key={`${a.src}-${i}`} asset={a} index={i} />
-        ))}
-      </div>
+      <>
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+          {assets.map((a, i) => (
+            <AssetCard
+              key={`${a.src}-${i}`}
+              asset={a}
+              index={i}
+              onOpen={setSelected}
+            />
+          ))}
+        </div>
+        {modal}
+      </>
     );
   }
 
   const isPosts = first.kind === "post";
   if (isPosts) {
     return (
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-        {assets.map((a, i) => (
-          <AssetCard key={`${a.src}-${i}`} asset={a} index={i} />
-        ))}
-      </div>
+      <>
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+          {assets.map((a, i) => (
+            <AssetCard
+              key={`${a.src}-${i}`}
+              asset={a}
+              index={i}
+              onOpen={setSelected}
+            />
+          ))}
+        </div>
+        {modal}
+      </>
     );
   }
 
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-      {assets.map((a, i) => (
-        <AssetCard key={`${a.src}-${i}`} asset={a} index={i} />
-      ))}
-    </div>
+    <>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        {assets.map((a, i) => (
+          <AssetCard
+            key={`${a.src}-${i}`}
+            asset={a}
+            index={i}
+            onOpen={setSelected}
+          />
+        ))}
+      </div>
+      {modal}
+    </>
   );
 }

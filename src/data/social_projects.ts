@@ -11,7 +11,7 @@ export interface SocialAsset {
   alt: string;
   kind: SocialAssetKind;
   caption?: string;
-  aspect?: "square" | "16/9" | "9/16";
+  aspect?: "square" | "16/9" | "32/9" | "9/16";
   poster?: string;
   videoSrc?: string;
 }
@@ -35,7 +35,7 @@ const IMG_EXT = ".webp";
 const VIDEO_EXT = ".webm";
 
 const KIND_ASPECT: Record<SocialAssetKind, NonNullable<SocialAsset["aspect"]>> = {
-  banner: "16/9",
+  banner: "32/9",
   post: "square",
   reel: "9/16",
   logo: "square",
@@ -89,18 +89,18 @@ export function buildSocialGallery(spec: SocialGallerySpec): SocialAsset[] {
     const count = counts[kind];
     for (let i = 1; i <= count; i++) {
       if (kind === "reel") {
-        const poster = `${spec.base}/reels/reel_${i}${IMG_EXT}`;
+        const poster = `${spec.base}/reels/reel-${i}${IMG_EXT}`;
         gallery.push({
           src: poster,
           alt: `${spec.label} — Reel ${i}`,
           kind,
           aspect: KIND_ASPECT[kind],
           poster,
-          videoSrc: `${spec.base}/reels/reel_${i}${VIDEO_EXT}`,
+          videoSrc: `${spec.base}/reels/reel-${i}${VIDEO_EXT}`,
         });
       } else {
         gallery.push({
-          src: `${spec.base}/${kind}s/${kind}_${i}${IMG_EXT}`,
+          src: `${spec.base}/${kind}s/${kind}-${i}${IMG_EXT}`,
           alt: `${spec.label} — ${KIND_LABEL[kind]} ${i}`,
           kind,
           aspect: KIND_ASPECT[kind],
@@ -127,7 +127,7 @@ export const socialProjects: SocialProject[] = [
       label: "MD",
       banners: 3,
       posts: 8,
-      reels: 4,
+      reels: 5,
     }),
   },
   {
@@ -138,14 +138,15 @@ export const socialProjects: SocialProject[] = [
     cover: "/assets/social/dermanet/dermanet.webp",
     thumbnail: "/assets/social/dermanet/dermanet.webp",
     subtitle: "Productos Dermatológicos",
-    palette: ["#7c8ca5", "#c5eafb", "#ffffff"],
+    palette: ["#6fa1d8", "#3b38c6", "#ffffff"],
     description: "Diseño y creación de contenido visual para redes sociales, desarrollando posts, banners y reels alineados con la identidad de marca. El proyecto busca fortalecer su presencia digital mediante una comunicación visual clara, atractiva y consistente.",
     gallery: buildSocialGallery({
       base: "/assets/social/dermanet",
       label: "Dermanet",
-      banners: 3,
+      banners: 4,
       mockups: 2,
       posts: 8,
+      reels: 2,
     }),
   },
 ];

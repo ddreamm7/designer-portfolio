@@ -89,4 +89,12 @@ main > footer {
   animation: headerSlideDown 0.75s ease-out both;
 }
 
+/* Oculta la barra de scroll manteniendo el desplazamiento por gesto/teclado */
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 

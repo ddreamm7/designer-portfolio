@@ -25,11 +25,16 @@ There is **no test suite** in this repo.
 
 Portfolio content lives in `src/data/` — agents edit data, not JSX, to change content:
 
-- `mock-projects.ts` — the `Project` array (shape in `projects.ts`). Each item has `slug`, `title`, `category`, `section`, `thumbnail`, `image`, `description`. Sections: `branding`, `social-media`, `flyers`, `audiovisual`.
-- `mock-logos.ts` / `logotypes.ts` — logo carousel entries.
-- Image assets go under `public/images/projects/` and `public/assets/logos`, referenced as `/images/projects/<file>` etc.
+- `branding_projects.ts` — `BrandingPiece[]` (`banner` | `flyer` | `post` | `mockup`) + `logos_projects.ts` for the `logotipos` filter. Each branding piece has `slug`, `title`, `year`, `section`, `kind`, `thumbnail`, `image`, `description`.
+- `social_projects.ts` — `SocialProject[]` with `buildSocialGallery` helper (kinds: `banner`, `post`, `flyer`, `reel`, `logo`, `mockup`).
+- `audiovisual_projects.ts` — `AudiovisualProject[]`.
+- Image assets:
+  - Branding: `public/assets/branding/{banners,flyers,posts,mockups,logotipos}/` → referenced as `/assets/branding/<kind>/<file>.webp`
+  - Social: `public/assets/social/<project>/{banners,posts,mockups,reels,logos,flyers}/`
+  - Home/brand: `public/assets/home/` (site identity: `logo-white/black.webp`, `hero_logo.webp`, favicons)
+  - Fallback: `public/images/placeholder.svg`
 
-When adding a project, add its image file to `public/` **and** the entry to `mock-projects.ts`, otherwise the build will not pick it up.
+When adding a project, add its image file to `public/` **and** the entry to the corresponding `src/data/*_projects.ts`, otherwise the build will not pick it up.
 
 ## Theming / styling quirks
 

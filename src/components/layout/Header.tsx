@@ -141,7 +141,7 @@ export default function Header() {
         <div className="flex items-center justify-between px-6 py-4 md:px-16 lg:px-48">
           <a href="/" aria-label="Ir al inicio">
             <Image
-              src="/assets/home/logo_w.webp"
+              src="/assets/home/logo-white.webp"
               alt="Logo"
               width={1186}
               height={1002}
@@ -149,7 +149,7 @@ export default function Header() {
               priority
             />
             <Image
-              src="/assets/home/logo_b.webp"
+              src="/assets/home/logo-black.webp"
               alt="Logo"
               width={1186}
               height={1002}
@@ -189,7 +189,7 @@ export default function Header() {
             className="shrink-0"
           >
             <Image
-              src="/assets/home/logo_w.webp"
+              src="/assets/home/logo-white.webp"
               alt="Logo"
               width={1186}
               height={1002}
@@ -197,7 +197,7 @@ export default function Header() {
               priority
             />
             <Image
-              src="/assets/home/logo_b.webp"
+              src="/assets/home/logo-black.webp"
               alt="Logo"
               width={1186}
               height={1002}
@@ -227,10 +227,10 @@ export default function Header() {
         </nav>
 
         {/* Mobile header bar */}
-        <div className="lg:hidden flex items-center justify-between px-6 py-4 md:px-16">
+        <div className="lg:hidden flex h-16 items-center justify-between px-6 py-4 md:px-16">
           <a href="#hero" onClick={(e) => handleClick(e, "hero")} aria-label="Ir al inicio">
             <Image
-              src="/assets/home/logo_w.webp"
+              src="/assets/home/logo-white.webp"
               alt="Logo"
               width={1186}
               height={1002}
@@ -238,7 +238,7 @@ export default function Header() {
               priority
             />
             <Image
-              src="/assets/home/logo_b.webp"
+              src="/assets/home/logo-black.webp"
               alt="Logo"
               width={1186}
               height={1002}
@@ -246,13 +246,13 @@ export default function Header() {
               priority
             />
           </a>
-          <div className="flex items-center gap-1">
-            <ThemeToggle />
+          <div className="flex shrink-0 items-center gap-2">
+            <ThemeToggle size="sm" />
             <button
             onClick={toggleMenu}
             aria-label={menuOpen ? "Cerrar navegación" : "Abrir navegación"}
             aria-expanded={menuOpen}
-            className="relative z-50 flex flex-col gap-1.5 p-2"
+            className="relative z-50 flex shrink-0 flex-col gap-1.5 p-2"
           >
             <span
               className={`block h-px w-6 bg-foreground transition-all duration-300 ${
@@ -276,10 +276,9 @@ export default function Header() {
 
       <div
         data-lenis-prevent
-        className={`fixed inset-x-0 bottom-0 z-30 bg-background backdrop-blur-md transition-opacity duration-300 ${
+        className={`fixed inset-x-0 top-16 bottom-0 z-30 bg-background backdrop-blur-md transition-opacity duration-300 ${
           menuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
-        style={{ top: "64px" }}
       >
         <nav className="flex flex-col items-center gap-8 pt-12 pb-24 min-h-full justify-center">
           {NAV_ITEMS.map(({ id, label }, i) => (

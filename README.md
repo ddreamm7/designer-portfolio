@@ -65,7 +65,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 pnpm build
 ```
 
-Produces a fully static export in `.next/`.
+Produces a fully static export in `out/` (`next.config.ts` sets `output: "export"`).
 
 ### Lint
 
@@ -80,37 +80,45 @@ src/
 ├── app/
 │   ├── globals.css               # Tailwind v4 theme tokens, reset, scrollbar styles
 │   ├── layout.tsx                 # Root layout — fonts, Lenis provider, header, footer
-│   ├── page.tsx                   # Home page — hero, about, 6 project sections, contact
+│   ├── page.tsx                   # Home page — hero, about, social, branding, audiovisual, contact
 │   └── projects/
 │       └── [slug]/
-│           └── page.tsx           # SSG project detail page
+│           └── page.tsx           # SSG project detail page (generateStaticParams)
 ├── components/
-│   ├── FadeInView.tsx             # Scroll-triggered fade-in wrapper
-│   ├── Footer.tsx                 # Copyright footer
-│   ├── Header.tsx                 # Auto-hiding nav + mobile hamburger overlay
-│   ├── LogoCarousel.tsx           # Draggable horizontal logo scroller
-│   ├── ProjectCard.tsx            # Image card with hover zoom + overlay
-│   ├── ProjectGrid.tsx            # Block renderer with "See More" pagination
-│   └── SmoothScrollProvider.tsx   # Lenis smooth scroll context
+│   ├── branding/BrandingSection.tsx # Branding filters + LogoGrid
+│   ├── gallery/{ProjectGrid,LogoGrid,ProjectCard}.tsx
+│   ├── layout/{Header,Footer,SmoothScrollProvider,ThemeProvider}.tsx
+│   └── shared/{FadeInView,ShowMoreButton}.tsx
 └── data/
-    ├── logotypes.ts               # Logo type definitions + helpers
-    ├── mock-logos.ts              # Mock logo entries
-    ├── mock-projects.ts           # 10 mock projects across 4 sections
-    └── projects.ts                # Project interface + query helpers
+    ├── branding_projects.ts       # BrandingPiece[] (banner|flyer|post|mockup)
+    ├── logos_projects.ts          # LogoProject[] for logotipos filter
+    ├── social_projects.ts         # SocialProject[] + buildSocialGallery helper
+    └── audiovisual_projects.ts    # AudiovisualProject[]
+public/
+├── assets/
+│   ├── branding/{banners,flyers,posts,mockups,logotipos}/ # Branding assets
+│   ├── social/<project>/{banners,posts,mockups,reels,logos,flyers}/ # Social assets
+│   └── home/{logo-white/black.webp,hero_logo.webp,favicon-*.ico} # Site identity
+└── images/placeholder.svg         # Fallback
 ```
 
 ## Customization
 
-### Projects
+### Branding
 
-Edit [`src/data/mock-projects.ts`](src/data/mock-projects.ts) to add, remove, or update portfolio items. Each project belongs to a `section` (`branding`, `social-media`, `flyers`, `audiovisual`) and includes a `slug`, `title`, `description`, `thumbnail`, and `image` path.
+Edit [`src/data/branding_projects.ts`](src/data/branding_projects.ts) to add, remove, or update branding pieces. Each piece has `kind` (`banner` | `flyer` | `post` | `mockup`), plus `slug`, `title`, `year`, `thumbnail`, `image`, `description`.
 
 > [!TIP]
-> Place project images in `public/images/projects/` and reference them as `/images/projects/<filename>`.
+> Place branding images in `public/assets/branding/<kind>/` where `<kind>` is `banners`, `flyers`, `posts`, `mockups`, or `logotipos`, and reference them as `/assets/branding/<kind>/<file>.webp`.
 
-### Logos
+### Logos (Branding — Logotipos)
 
-Edit [`src/data/mock-logos.ts`](src/data/mock-logos.ts) to replace logo entries. Place logo SVGs or images in `public/assets/logos`.
+Edit [`src/data/logos_projects.ts`](src/data/logos_projects.ts) to replace logo entries. Place logo images in `public/assets/branding/logotipos/` and reference them as `/assets/branding/logotipos/<file>.webp` (used by the `logotipos` filter in `BrandingSection`).
+
+### Social & Audiovisual
+
+- **Social:** edit [`src/data/social_projects.ts`](src/data/social_projects.ts) — assets live in `public/assets/social/<project>/{banners,posts,mockups,reels,logos,flyers}/`
+- **Audiovisual:** edit [`src/data/audiovisual_projects.ts`](src/data/audiovisual_projects.ts)
 
 ### Content & copy
 
@@ -151,4 +159,4 @@ The site is a fully static Next.js app and can be deployed to any static hosting
 pnpm build
 ```
 
-The output in `.next/` can be served with `pnpm start` or exported for any static file server.
+The output in `out/` can be served with `pnpm start` (`npx serve out`) or exported for any static file server.
