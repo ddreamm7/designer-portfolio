@@ -46,7 +46,7 @@ export default function SocialCasePage({ project }: { project: SocialProject }) 
         </div>
       </FadeInView>
 
-      <div className="mt-10 grid grid-cols-1 gap-10 md:grid-cols-2 md:items-stretch">
+      <div className="mt-10 grid grid-cols-1 gap-32 md:grid-cols-2 md:items-stretch">
         <FadeInView delay={0.05} className="flex min-w-0">
           <div className="flex w-full min-w-0 flex-col justify-center">
             <p className="whitespace-pre-line text-lg leading-relaxed text-muted">

@@ -44,34 +44,38 @@
   color: #fafafa;
 }
 
-/* Transición de 1s al alternar tema (clase temporal desde ThemeProvider) */
-html.theme-anim *,
-html.theme-anim *::before,
-html.theme-anim *::after {
-  transition:
-    background-color 0.5s ease,
-    color 0.5s ease,
-    border-color 0.5s ease,
-    fill 0.5s ease,
-    stroke 0.5s ease !important;
+html {
+  --theme-transition-property: background-color, color, border-color, fill, stroke, background, opacity, box-shadow, text-decoration-color, caret-color;
+  --theme-transition-duration: 0.5s;
+  --theme-transition-timing: ease;
+}
+
+html * {
+  transition-property: var(--theme-transition-property);
+  transition-duration: var(--theme-transition-duration);
+  transition-timing-function: var(--theme-transition-timing);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  html.theme-anim *,
-  html.theme-anim *::before,
-  html.theme-anim *::after {
+  html * {
     transition: none !important;
   }
 }
 
 body {
-  background: var(--color-background);
+  background-color: var(--color-background);
   color: var(--color-foreground);
 }
 
 main > section,
 main > footer {
   border-bottom: 1px solid var(--color-border);
+}
+
+section[id],
+footer[id],
+[id^="section-"] {
+  scroll-margin-top: 80px;
 }
 
 @keyframes headerSlideDown {
@@ -89,7 +93,6 @@ main > footer {
   animation: headerSlideDown 0.75s ease-out both;
 }
 
-/* Oculta la barra de scroll manteniendo el desplazamiento por gesto/teclado */
 @utility scrollbar-none {
   scrollbar-width: none;
   &::-webkit-scrollbar {

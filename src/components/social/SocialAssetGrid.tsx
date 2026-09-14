@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import type { SocialAsset } from "@/data/social_projects";
 import FadeInView from "@/components/shared/FadeInView";
+import HoverShade from "@/components/shared/HoverShade";
 import ImageModal from "@/components/shared/ImageModal";
 import SocialReelCard from "./SocialReelCard";
 
@@ -63,6 +64,7 @@ function AssetCard({
             sizes={isLogo ? "(max-width:768px) 50vw, 33vw" : "(max-width:768px) 100vw, 50vw"}
             className={`${isLogo ? "object-contain p-2" : "object-cover"} transition-transform duration-500 group-hover:scale-[1.02]`}
           />
+          <HoverShade />
           {asset.caption && !isLogo && (
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent px-3 py-2">
               <p className="text-xs tracking-wide text-white">{asset.caption}</p>

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState, useRef } from "react";
+import HoverShade from "@/components/shared/HoverShade";
 
 interface Props {
   src: string;
@@ -34,8 +35,9 @@ export default function SocialReelCard({ src, alt, poster, videoSrc, caption }: 
               alt={alt}
               fill
               sizes="(max-width:768px) 50vw, 33vw"
-              className="object-cover"
+              className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
             />
+            <HoverShade />
             <span className="absolute left-1/2 top-1/2 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-black backdrop-blur transition-transform duration-300 group-hover:scale-105 group-active:scale-95">
               <span aria-hidden className="ml-0.5 text-lg leading-none">▶</span>
             </span>
@@ -78,6 +80,7 @@ export default function SocialReelCard({ src, alt, poster, videoSrc, caption }: 
           sizes="(max-width:768px) 50vw, 33vw"
           className="object-cover transition-transform duration-500 group-hover:scale-105"
         />
+        <HoverShade />
         <span className="absolute right-2 top-2 rounded-full bg-black/70 px-2 py-1 text-[10px] uppercase tracking-widest text-white">
           Reel
         </span>
