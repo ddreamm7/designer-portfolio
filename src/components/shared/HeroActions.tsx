@@ -1,17 +1,12 @@
 "use client";
 
-import { useLenis } from "@/components/layout/SmoothScrollProvider";
-
 export default function HeroActions() {
-  const { lenis } = useLenis();
-
   const handleClick =
     (id: string) => (e: React.MouseEvent<HTMLAnchorElement>) => {
       e.preventDefault();
       const el = document.getElementById(id);
       if (!el) return;
-      if (lenis) lenis.scrollTo(el, { duration: 1.8 });
-      else el.scrollIntoView({ behavior: "smooth" });
+      el.scrollIntoView({ behavior: "smooth" });
     };
 
   return (

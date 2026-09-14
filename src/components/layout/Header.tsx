@@ -2,9 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { usePathname } from "next/navigation";
-import { useLenis } from "./SmoothScrollProvider";
 import ThemeToggle from "./ThemeToggle";
 
 
@@ -17,125 +16,86 @@ const NAV_ITEMS = [
   { id: "contact", label: "Contacto" },
 ];
 
-const SCROLL_VELOCITY_THRESHOLD = 1.2;
-
 export default function Header() {
   const pathname = usePathname();
   const isHome = pathname === "/";
-  const { lenis, stop: lenisStop, start: lenisStart } = useLenis();
-  const [visible, setVisible] = useState(true);
   const [activeSection, setActiveSection] = useState("hero");
   const [menuOpen, setMenuOpen] = useState(false);
-  const lastScrollYRef = useRef(0);
-  const tickingRef = useRef(false);
+  const headerRef = useRef<HTMLElement>(null);
+  const headerHeightRef = useRef(100);
 
   useEffect(() => {
-    if (menuOpen) lenisStop();
-    else {
-      lenisStart();
-      setVisible(true);
-      lastScrollYRef.current = window.scrollY;
-      tickingRef.current = false;
-    }
-  }, [menuOpen, lenisStop, lenisStart]);
-
-  useEffect(() => () => lenisStart(), [lenisStart]);
+    document.body.style.overflow = menuOpen && isHome ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen, isHome]);
 
   useEffect(() => {
-    if (isHome) {
-      setActiveSection("hero");
-      setVisible(true);
-      setMenuOpen(false);
-      lenisStart();
-      lastScrollYRef.current = window.scrollY;
-    } else {
-      setMenuOpen(false);
-      lenisStart();
-      setVisible(true);
-    }
-  }, [pathname, isHome, lenisStart]);
+    const el = headerRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.borderBoxSize) {
+          headerHeightRef.current = entry.borderBoxSize[0]?.blockSize ?? 100;
+        } else {
+          headerHeightRef.current = el.getBoundingClientRect().height;
+        }
+      }
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
-  useEffect(() => {
-    if (!isHome) return;
-    if (menuOpen) return;
-
+  const buildObserver = useCallback(() => {
     const sections = NAV_ITEMS.map((item) =>
       document.getElementById(item.id),
     ).filter(Boolean) as HTMLElement[];
 
-    const handleScroll = () => {
-      if (menuOpen) return;
-      const currentScrollY = window.scrollY;
-      const scrollDiff = currentScrollY - lastScrollYRef.current;
-      const goingDown = scrollDiff > 0;
+    if (sections.length === 0) return null;
 
-      if (currentScrollY < 100) setVisible(true);
-      else if (goingDown && Math.abs(scrollDiff) > SCROLL_VELOCITY_THRESHOLD) setVisible(false);
-      else if (!goingDown && Math.abs(scrollDiff) > 0.15) setVisible(true);
-
-      if (tickingRef.current) return;
-      tickingRef.current = true;
-
-      requestAnimationFrame(() => {
-        const scrollY = window.scrollY;
-        const scrollPos = scrollY + window.innerHeight * 0.4;
-        let current = NAV_ITEMS[0].id;
-
-        for (let i = 0; i < sections.length; i++) {
-          const rect = sections[i].getBoundingClientRect();
-          const sectionTop = rect.top + scrollY;
-          if (sectionTop <= scrollPos) current = NAV_ITEMS[i].id;
+    const h = headerHeightRef.current;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
         }
+      },
+      {
+        rootMargin: `-${h}px 0px 0px 0px`,
+        threshold: 0.6,
+      },
+    );
 
-        setActiveSection(current);
-        lastScrollYRef.current = currentScrollY;
-        tickingRef.current = false;
-      });
-    };
+    for (const sec of sections) observer.observe(sec);
+    return observer;
+  }, []);
 
-    let off: (() => void) | undefined;
-    if (lenis) {
-      const onLenisScroll = ({ direction }: { direction: number }) => {
-        if (window.scrollY < 100 || direction === -1) setVisible(true);
-      };
-      lenis.on("scroll", onLenisScroll);
-      off = () => lenis.off("scroll", onLenisScroll);
-    }
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      off?.();
-    };
-  }, [isHome, lenis, menuOpen]);
+  useEffect(() => {
+    if (!isHome || menuOpen) return;
+    const observer = buildObserver();
+    return () => observer?.disconnect();
+  }, [isHome, menuOpen, pathname, buildObserver]);
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     if (!isHome) return;
     e.preventDefault();
-    lenisStart();
     const element = document.getElementById(id);
     if (!element) return;
-    if (lenis) lenis.scrollTo(element, { duration: 2 });
-    else element.scrollIntoView({ behavior: "smooth" });
+    element.scrollIntoView({ behavior: "smooth" });
   };
 
   const toggleMenu = () => {
     if (!isHome) return;
-    setMenuOpen((prev) => {
-      const next = !prev;
-      if (!next) {
-        setVisible(true);
-        lastScrollYRef.current = window.scrollY;
-        tickingRef.current = false;
-      }
-      return next;
-    });
+    setMenuOpen((prev) => !prev);
   };
 
   if (!isHome) {
     return (
       <header
-        data-lenis-prevent
+        ref={headerRef}
         className="fixed top-0 right-0 left-0 z-40 border-b border-border/60 bg-background backdrop-blur-md"
       >
         <div className="flex items-center justify-between px-6 py-4 md:px-16 lg:px-48">
@@ -143,16 +103,16 @@ export default function Header() {
             <Image
               src="/assets/home/logo-white.webp"
               alt="Logo"
-              width={1186}
-              height={1002}
+              width={1000}
+              height={1000}
               className="block h-10 w-auto object-contain light:hidden md:h-11"
               priority
             />
             <Image
               src="/assets/home/logo-black.webp"
               alt="Logo"
-              width={1186}
-              height={1002}
+              width={1000}
+              height={1000}
               className="hidden h-10 w-auto object-contain light:block md:h-11"
               priority
             />
@@ -175,15 +135,13 @@ export default function Header() {
   return (
     <>
       <header
-        data-lenis-prevent
-        className={`animate-header-in fixed top-0 right-0 left-0 z-40 border-b border-border/60 bg-background transition-transform duration-500 ease-out ${
-          visible ? "translate-y-0 pointer-events-auto" : "-translate-y-full pointer-events-none"
-        }`}
+        ref={headerRef}
+        className="animate-header-in fixed top-0 right-0 left-0 z-40 border-b border-border/60 bg-background"
       >
-        {/* Desktop nav */}
+        {/* DESKTOP NAVBAR */}
         <nav className="hidden lg:flex items-center justify-between px-6 py-4 md:px-16 lg:px-48">
           <a
-            href="#hero"
+            href="#"
             onClick={(e) => handleClick(e, "hero")}
             aria-label="Ir al inicio"
             className="shrink-0"
@@ -191,16 +149,16 @@ export default function Header() {
             <Image
               src="/assets/home/logo-white.webp"
               alt="Logo"
-              width={1186}
-              height={1002}
+              width={1000}
+              height={1000}
               className="block h-10 w-auto object-contain light:hidden md:h-11"
               priority
             />
             <Image
               src="/assets/home/logo-black.webp"
               alt="Logo"
-              width={1186}
-              height={1002}
+              width={1000}
+              height={1000}
               className="hidden h-10 w-auto object-contain light:block md:h-11"
               priority
             />
@@ -211,14 +169,18 @@ export default function Header() {
                 key={id}
                 href={`#${id}`}
                 onClick={(e) => handleClick(e, id)}
-                className={`group relative whitespace-nowrap text-xs tracking-widest transition-all duration-300 ${
+                className={`relative whitespace-nowrap text-xs tracking-widest transition-all duration-300 ${
                   activeSection === id
-                    ? " text-foreground"
-                    : "font-medium text-muted hover:text-foreground"
+                    ? "text-foreground"
+                    : "text-muted"
                 }`}
               >
                 {label}
-                <span className="absolute -bottom-1 left-1/2 h-px w-0 bg-foreground transition-all duration-300 -translate-x-1/2 group-hover:w-full" />
+                <span
+                  className={`absolute -bottom-1 left-1/2 h-px w-full bg-foreground transition-opacity duration-300 -translate-x-1/2 ${
+                    activeSection === id ? "opacity-100" : "opacity-0"
+                  }`}
+                />
               </a>
             ))}
             <span aria-hidden className="h-6 w-px bg-border" />
@@ -232,16 +194,16 @@ export default function Header() {
             <Image
               src="/assets/home/logo-white.webp"
               alt="Logo"
-              width={1186}
-              height={1002}
+              width={1000}
+              height={1000}
               className="block h-8 w-auto object-contain light:hidden"
               priority
             />
             <Image
               src="/assets/home/logo-black.webp"
               alt="Logo"
-              width={1186}
-              height={1002}
+              width={1000}
+              height={1000}
               className="hidden h-8 w-auto object-contain light:block"
               priority
             />
@@ -275,30 +237,34 @@ export default function Header() {
       </header>
 
       <div
-        data-lenis-prevent
         className={`fixed inset-x-0 top-16 bottom-0 z-30 bg-background backdrop-blur-md transition-opacity duration-300 ${
           menuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
       >
         <nav className="flex flex-col items-center gap-8 pt-12 pb-24 min-h-full justify-center">
           {NAV_ITEMS.map(({ id, label }, i) => (
-            <a
-              key={id}
-              href={`#${id}`}
-              onClick={(e) => {
-                handleClick(e, id);
-                toggleMenu();
-              }}
-              style={{ transitionDelay: `${menuOpen ? i * 0.05 : 0}s` }}
-              className={`text-xl uppercase tracking-widest transition-all duration-300 ${
-                menuOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-              } ${
-                activeSection === id
-                  ? "text-foreground"
-                  : "text-muted hover:text-foreground"
-              }`}
-            >
-              {label}
+              <a
+                key={id}
+                href={`#${id}`}
+                onClick={(e) => {
+                  handleClick(e, id);
+                  toggleMenu();
+                }}
+                style={{ transitionDelay: `${menuOpen ? i * 0.05 : 0}s` }}
+                className={`text-xl relative uppercase tracking-widest transition-all duration-300 ${
+                  menuOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                } ${
+                  activeSection === id
+                    ? "text-foreground"
+                    : "text-muted"
+                }`}
+              >
+                {label}
+                <span
+                  className={`absolute -bottom-1 left-1/2 h-px w-full bg-foreground transition-opacity duration-300 -translate-x-1/2 ${
+                    activeSection === id ? "opacity-100" : "opacity-0"
+                  }`}
+                />
             </a>
           ))}
         </nav>

@@ -48,7 +48,7 @@ export default async function ProjectPage({
         </div>
 
         <div className="flex w-full items-stretch">
-          <div className="relative my-auto aspect-[17/10] w-full overflow-hidden rounded-lg border border-border bg-surface md:aspect-auto md:h-full">
+          <div className="relative my-auto aspect-video w-full overflow-hidden rounded-lg border-12 border-border bg-surface md:aspect-auto md:h-full">
             <ZoomableImage
               src={project.image}
               alt={project.title}

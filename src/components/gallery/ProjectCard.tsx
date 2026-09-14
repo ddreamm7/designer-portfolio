@@ -3,6 +3,7 @@
 import { memo } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import HoverShade from "@/components/shared/HoverShade";
 
 interface ProjectCardProps {
   slug: string;
@@ -29,8 +30,8 @@ function ProjectCard({
         <div
           className={
             isLarge
-              ? "relative overflow-hidden rounded-lg bg-surface aspect-[16/9]"
-              : "relative overflow-hidden rounded-lg bg-surface flex-1 min-h-[180px]"
+              ? "relative overflow-hidden rounded-lg bg-surface aspect-video"
+              : "relative overflow-hidden rounded-lg bg-surface flex-1 min-h-45"
           }
         >
           <Image
@@ -44,6 +45,7 @@ function ProjectCard({
             }
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
+          <HoverShade />
         </div>
         <div className="mt-4">
           <p className="text-xs uppercase tracking-widest text-muted">

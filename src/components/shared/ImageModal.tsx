@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
-import { useLenis } from "@/components/layout/SmoothScrollProvider";
 
 interface ImageModalProps {
   src: string;
@@ -16,21 +15,17 @@ interface ImageModalProps {
  * Cierra con click en el backdrop, botón X o tecla Escape.
  */
 export default function ImageModal({ src, alt, onClose }: ImageModalProps) {
-  const { stop, start } = useLenis();
-
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
     document.addEventListener("keydown", onKeyDown);
     document.body.style.overflow = "hidden";
-    stop();
     return () => {
       document.removeEventListener("keydown", onKeyDown);
       document.body.style.overflow = "";
-      start();
     };
-  }, [onClose, stop, start]);
+  }, [onClose]);
 
   return createPortal(
     <div

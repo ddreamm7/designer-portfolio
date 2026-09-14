@@ -43,10 +43,7 @@ export default function ThemeProvider({ children }: { children: ReactNode }) {
 
   const toggle = useCallback(() => {
     const next: Theme = currentTheme() === "light" ? "dark" : "light";
-    const root = document.documentElement;
-    root.classList.add("theme-anim");
-    root.classList.toggle("light", next === "light");
-    window.setTimeout(() => root.classList.remove("theme-anim"), 500);
+    document.documentElement.classList.toggle("light", next === "light");
     try {
       localStorage.setItem(STORAGE_KEY, next);
     } catch {
