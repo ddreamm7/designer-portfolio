@@ -32,7 +32,7 @@ export const brandingPieces: BrandingPiece[] = [
     gallery: buildBrandingGallery({
       slug: "dsumar",
       label: "D'Sumar",
-      items: 9,
+      items: 10,
     }),
   },
   {
