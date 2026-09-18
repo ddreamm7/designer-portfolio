@@ -1,14 +1,17 @@
+"use client";
+
+import { useState } from "react";
+import Image from "next/image";
 import type { SocialProject } from "@/data/social_projects";
 import FadeInView from "@/components/shared/FadeInView";
-import ZoomableImage from "@/components/shared/ZoomableImage";
-import SocialAssetGrid from "./SocialAssetGrid";
+import HoverShade from "@/components/shared/HoverShade";
+import ImageModal from "@/components/shared/ImageModal";
+import SocialGalleryGrid from "./SocialGalleryGrid";
 import SocialSectionNav from "./SocialSectionNav";
 
 const KIND_LABELS: Record<string, string> = {
   banner: "Banners",
   post: "Posts",
-  flyer: "Flyers",
-  logo: "Logos",
   reel: "Reels",
   mockup: "Mockups",
 };
@@ -19,14 +22,15 @@ function groupByKind(gallery: SocialProject["gallery"]) {
     if (!groups.has(asset.kind)) groups.set(asset.kind, []);
     groups.get(asset.kind)!.push(asset);
   }
-  // Orden editorial: banners → mockups → posts → reels (flyer/logo si aparecen)
-  const order = ["banner", "mockup", "post", "reel", "logo", "flyer"];
+  // Orden editorial: banners → mockups → posts → reels
+  const order = ["banner", "mockup", "post", "reel"];
   return [...groups.entries()].sort(
     (a, b) => order.indexOf(a[0]) - order.indexOf(b[0])
   );
 }
 
 export default function SocialCasePage({ project }: { project: SocialProject }) {
+  const [coverOpen, setCoverOpen] = useState(false);
   const grouped = groupByKind(project.gallery);
   const kinds = grouped.map(([k]) => k);
 
@@ -46,9 +50,9 @@ export default function SocialCasePage({ project }: { project: SocialProject }) 
         </div>
       </FadeInView>
 
-      <div className="mt-10 grid grid-cols-1 gap-32 md:grid-cols-2 md:items-stretch">
-        <FadeInView delay={0.05} className="flex min-w-0">
-          <div className="flex w-full min-w-0 flex-col justify-center">
+      <div className="mt-10 grid grid-cols-1 gap-8 md:grid-cols-2 md:items-start">
+        <FadeInView delay={0.05} className="flex min-w-0 items-start">
+          <div className="flex w-full min-w-0 flex-col items-start justify-start">
             <p className="whitespace-pre-line text-lg leading-relaxed text-muted">
               {project.description}
             </p>
@@ -75,20 +79,31 @@ export default function SocialCasePage({ project }: { project: SocialProject }) 
           </div>
         </FadeInView>
 
-        <FadeInView delay={0.1} className="flex min-w-0">
-          <div className="flex w-full min-w-0 items-stretch">
-            <div className="relative my-auto aspect-[17/10] w-full max-h-full overflow-hidden rounded-lg border border-border bg-surface md:aspect-auto md:h-full md:max-h-none">
-              <ZoomableImage
+        <FadeInView delay={0.1} className="flex min-w-0 items-start">
+          <div className="flex w-full min-w-0 items-start">
+            <button
+              type="button"
+              onClick={() => setCoverOpen(true)}
+              aria-label={`Ver imagen ampliada: ${project.title}`}
+              className="group relative flex aspect-[16/9] w-full cursor-zoom-in items-stretch overflow-hidden rounded-lg border border-border bg-surface text-left"
+            >
+              <Image
                 src={project.cover}
                 alt={project.title}
+                fill
                 sizes="(max-width:768px) 100vw, 560px"
-                className="object-cover"
                 priority
+                className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
               />
-            </div>
+              <HoverShade />
+            </button>
           </div>
         </FadeInView>
       </div>
+
+      {coverOpen && (
+        <ImageModal src={project.cover} alt={project.title} onClose={() => setCoverOpen(false)} />
+      )}
 
       {/* Nav anchor por kind */}
       {kinds.length > 1 && (
@@ -108,7 +123,7 @@ export default function SocialCasePage({ project }: { project: SocialProject }) 
                 </h2>
               </div>
             </FadeInView>
-            <SocialAssetGrid assets={assets} />
+            <SocialGalleryGrid assets={assets} />
           </section>
         ))}
       </div>

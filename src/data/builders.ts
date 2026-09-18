@@ -35,13 +35,7 @@ export function buildBrandingGallery(spec: BrandingGallerySpec): BrandingAsset[]
 
 // ---- Social -------------------------------------------------------------
 
-export type SocialAssetKind =
-  | "banner"
-  | "post"
-  | "flyer"
-  | "reel"
-  | "logo"
-  | "mockup";
+export type SocialAssetKind = "banner" | "post" | "reel" | "mockup";
 
 export interface SocialAsset {
   src: string;
@@ -57,8 +51,6 @@ const KIND_ASPECT: Record<SocialAssetKind, NonNullable<SocialAsset["aspect"]>> =
   banner: "32/9",
   post: "square",
   reel: "9/16",
-  logo: "square",
-  flyer: "9/16",
   mockup: "16/9",
 };
 
@@ -66,20 +58,11 @@ const KIND_LABEL: Record<SocialAssetKind, string> = {
   banner: "Banner",
   post: "Post",
   reel: "Reel",
-  logo: "Logo",
-  flyer: "Flyer",
   mockup: "Mockup",
 };
 
-// Orden editorial: banners → mockups → posts → reels → logos → flyers
-const KIND_ORDER: SocialAssetKind[] = [
-  "banner",
-  "mockup",
-  "post",
-  "reel",
-  "logo",
-  "flyer",
-];
+// Orden editorial: banners → mockups → posts → reels
+const KIND_ORDER: SocialAssetKind[] = ["banner", "mockup", "post", "reel"];
 
 export interface SocialGallerySpec {
   /** Carpeta base del caso, ej. "/assets/social/md" */
@@ -90,8 +73,6 @@ export interface SocialGallerySpec {
   posts?: number;
   mockups?: number;
   reels?: number;
-  logos?: number;
-  flyers?: number;
 }
 
 export function buildSocialGallery(spec: SocialGallerySpec): SocialAsset[] {
@@ -100,8 +81,6 @@ export function buildSocialGallery(spec: SocialGallerySpec): SocialAsset[] {
     post: spec.posts ?? 0,
     mockup: spec.mockups ?? 0,
     reel: spec.reels ?? 0,
-    logo: spec.logos ?? 0,
-    flyer: spec.flyers ?? 0,
   };
   const gallery: SocialAsset[] = [];
   for (const kind of KIND_ORDER) {

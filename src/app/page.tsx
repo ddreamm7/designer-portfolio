@@ -1,10 +1,10 @@
 import Image from "next/image";
 import FadeInView from "@/components/shared/FadeInView";
 import HeroActions from "@/components/shared/HeroActions";
-import ProjectGrid from "@/components/gallery/ProjectGrid";
 import SocialSection from "@/components/social/SocialSection";
 import BrandingSection from "@/components/branding/BrandingSection";
-import { audiovisualProjects } from "@/data/audiovisual_projects";
+// import ProjectGrid from "@/components/gallery/ProjectGrid"; // desactivado - audiovisual movido a audiovisual/
+// import { audiovisualProjects } from "@/data/audiovisual_projects"; // desactivado - ver audiovisual/README.md
 
 
 const SOCIAL_LINKS = [
@@ -23,28 +23,20 @@ const SOFTWARES = [
   { label: "CapCut", abbr: "Cc" },
 ] as const;
 
-function SectionHeader({
-  number,
-  title,
-}: {
-  number: string;
-  title: string;
-}) {
-  return (
-    <FadeInView>
-      <div className="mb-12 flex items-baseline gap-4">
-        <span className="text-sm font-mono font-medium text-muted">{number}</span>
-        <h2 className="text-4xl font-bold uppercase tracking-tight md:text-5xl">
-          {title}
-        </h2>
-      </div>
-    </FadeInView>
-  );
-}
-
-function ProjectSection() {
-  return <ProjectGrid projects={audiovisualProjects} />;
-}
+// SectionHeader y ProjectSection desactivados - audiovisual movido a audiovisual/ - ver audiovisual/README.md
+// function SectionHeader({ number, title }: { number: string; title: string }) {
+//   return (
+//     <FadeInView>
+//       <div className="mb-12 flex items-baseline gap-4">
+//         <span className="text-sm font-mono font-medium text-muted">{number}</span>
+//         <h2 className="text-4xl font-bold uppercase tracking-tight md:text-5xl">{title}</h2>
+//       </div>
+//     </FadeInView>
+//   );
+// }
+// function ProjectSection() {
+//   return <ProjectGrid projects={audiovisualProjects} />;
+// }
 
 export default function HomePage() {
   return (
@@ -135,18 +127,18 @@ export default function HomePage() {
         <BrandingSection />
       </section>
 
-      {/* 04 AUDIOVISUAL */}
-      <section id="audiovisual" className="px-6 py-16 md:py-24 md:px-16 lg:px-48">
+      {/* 04 AUDIOVISUAL - desactivado temporalmente, ver audiovisual/README.md */}
+      {/* <section id="audiovisual" className="px-6 py-16 md:py-24 md:px-16 lg:px-48">
         <SectionHeader number="04" title="Audiovisual" />
         <ProjectSection />
-      </section>
+      </section> */}
 
-      {/* 05 CONTACT */}
+      {/* 04 CONTACT (antes 05) */}
       <footer id="contact" className="px-6 py-16 md:py-24 md:px-16 lg:px-48">
         <FadeInView>
           <div className="grid grid-cols-1 gap-16 md:grid-cols-12">
             <div className="md:col-span-5">
-              <span className="text-sm font-mono font-medium text-muted">05</span>
+              <span className="text-sm font-mono font-medium text-muted">04</span>
               <h2 className="mt-1 text-4xl font-bold uppercase tracking-tight md:text-5xl">
                 Contacto
               </h2>

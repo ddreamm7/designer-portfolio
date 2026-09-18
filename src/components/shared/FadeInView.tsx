@@ -2,10 +2,12 @@
 
 import { useEffect, useRef, useState, ReactNode } from "react";
 
+// Unificado para reúso en GalleryGrid (branding/social) y resto del sitio.
+// Uso: <FadeInView delay={Math.min(index*0.035, 0.35)}> via GalleryGrid.Item
 interface FadeInViewProps {
   children: ReactNode;
   className?: string;
-  delay?: number;
+  delay?: number; // segundos, cap recomendado 0.35
 }
 
 export default function FadeInView({

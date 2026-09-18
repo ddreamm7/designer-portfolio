@@ -3,8 +3,6 @@
 const LABELS: Record<string, string> = {
   banner: "Banners",
   post: "Posts",
-  flyer: "Flyers",
-  logo: "Logos",
   reel: "Reels",
   mockup: "Mockups",
 };

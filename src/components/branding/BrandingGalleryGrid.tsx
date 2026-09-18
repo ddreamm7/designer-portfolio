@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import type { BrandingAsset } from "@/data/branding_projects";
-import FadeInView from "@/components/shared/FadeInView";
+import GalleryGrid from "@/components/gallery/GalleryGrid";
 import HoverShade from "@/components/shared/HoverShade";
 import ImageModal from "@/components/shared/ImageModal";
 
@@ -11,38 +11,35 @@ interface BrandingGalleryGridProps {
   assets: BrandingAsset[];
 }
 
-const PATTERN_10 = [
-  "row-span-2", // 1 - base (2 de 10)
-  "row-span-4", // 2 portrait (doble altura, 4 de 10)
-  "row-span-2", // 3
-  "row-span-2", // 4
-  "row-span-4", // 5 portrait (doble altura)
-  "col-span-2 row-span-2", // 6 wide
-  "row-span-2", // 7
-  "col-span-2 row-span-2", // 8 wide
-  "col-span-2 row-span-2", // 9 wide
-  "row-span-2", // 10
-] as const;
+// Layout Branding 8 (repite cada 8) — 4 cols, 1:1 base, fila = 25cqw (≈ ancho 1 col)
+// 1:1x1 (1x1), 2:1x1 (1x1), 3:2x1 (2x1), 4:1x1 (1x1), 5:2x1 (2x1), 6:1x2 (1x2), 7:2x1 (2x1), 8:1x1 (1x1)
+const BRANDING_COL_SPAN: (1 | 2)[] = [1, 1, 2, 1, 2, 1, 2, 1];
+const BRANDING_ROW_SPAN: (1 | 2)[] = [1, 1, 1, 1, 1, 2, 1, 1];
 
-function spanForIndex(index: number): string {
-  return PATTERN_10[index % PATTERN_10.length];
+function colSpanForIndex(index: number): 1 | 2 {
+  return BRANDING_COL_SPAN[index % BRANDING_COL_SPAN.length];
 }
 
-export default function BrandingGalleryGrid({ assets }: BrandingGalleryGridProps) {
-  const [selected, setSelected] = useState<BrandingAsset | null>(null);
+function rowSpanForIndex(index: number): 1 | 2 {
+  return BRANDING_ROW_SPAN[index % BRANDING_ROW_SPAN.length];
+}
 
-  const spans = useMemo(() => assets.map((_, i) => spanForIndex(i)), [assets]);
+export default function BrandingGalleryGrid({
+  assets,
+}: BrandingGalleryGridProps) {
+  const [selected, setSelected] = useState<BrandingAsset | null>(null);
 
   if (assets.length === 0) return null;
 
   return (
     <>
-      <div className="grid grid-cols-2 gap-3 auto-rows-40 grid-flow-dense md:grid-cols-3 md:grid-flow-dense md:gap-4">
+      <GalleryGrid squareRows>
         {assets.map((asset, index) => (
-          <FadeInView
+          <GalleryGrid.Item
             key={`${asset.src}-${index}`}
-            delay={Math.min(index * 0.035, 0.35)}
-            className={spans[index]}
+            colSpan={colSpanForIndex(index)}
+            rowSpan={rowSpanForIndex(index)}
+            index={index}
           >
             <button
               type="button"
@@ -59,12 +56,16 @@ export default function BrandingGalleryGrid({ assets }: BrandingGalleryGridProps
               />
               <HoverShade />
             </button>
-          </FadeInView>
+          </GalleryGrid.Item>
         ))}
-      </div>
+      </GalleryGrid>
 
       {selected ? (
-        <ImageModal src={selected.src} alt={selected.alt} onClose={() => setSelected(null)} />
+        <ImageModal
+          src={selected.src}
+          alt={selected.alt}
+          onClose={() => setSelected(null)}
+        />
       ) : null}
     </>
   );

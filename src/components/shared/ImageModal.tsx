@@ -33,7 +33,7 @@ export default function ImageModal({ src, alt, onClose }: ImageModalProps) {
       aria-modal="true"
       aria-label={alt}
       onClick={onClose}
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm md:p-8"
+      className="fixed inset-0 z-100 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm md:p-8"
     >
       <button
         type="button"

@@ -12,7 +12,7 @@ interface Props {
   caption?: string;
 }
 
-export default function SocialReelCard({ src, alt, poster, videoSrc, caption }: Props) {
+export default function ReelCard({ src, alt, poster, videoSrc, caption }: Props) {
   const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 

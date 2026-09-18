@@ -12,7 +12,7 @@ const NAV_ITEMS = [
   { id: "about", label: "Sobre Mí" },
   { id: "redes-sociales", label: "Redes Sociales" },
   { id: "branding", label: "Branding" },
-  { id: "audiovisual", label: "Audiovisual" },
+  // { id: "audiovisual", label: "Audiovisual" }, // desactivado - ver audiovisual/README.md
   { id: "contact", label: "Contacto" },
 ];
 

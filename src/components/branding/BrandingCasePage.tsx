@@ -21,13 +21,12 @@ export default function BrandingCasePage({ project }: { project: BrandingPiece }
       </FadeInView>
 
       <FadeInView delay={0.05}>
-        <div className="mt-10 max-w-3xl">
-          <p className="whitespace-pre-line text-lg leading-relaxed text-muted">
+        <div className="mt-10">
+          <p className="text-lg leading-relaxed text-muted">
             {project.description}
           </p>
         </div>
       </FadeInView>
-
 
       {hasGallery && (
         <>
@@ -35,6 +34,11 @@ export default function BrandingCasePage({ project }: { project: BrandingPiece }
             <hr className="mt-0 border-0 border-t border-border md:mt-20" aria-hidden="true" />
           </FadeInView>
           <div className="mt-10 md:mt-12">
+            <FadeInView>
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold tracking-tight md:text-3xl">Galería</h2>
+              </div>
+            </FadeInView>
             <BrandingGalleryGrid assets={gallery} />
           </div>
         </>
